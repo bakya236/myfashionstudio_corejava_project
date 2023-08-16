@@ -2,6 +2,7 @@ package in.fssa.myfashionstudioapp;
 
 import java.util.List;
 
+import in.fssa.myfashionstudioapp.dao.PriceDAO;
 import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.validator.SizeValidator;
 
@@ -31,9 +32,28 @@ public class PriceValidator {
 
 			PriceValidator.rejectIfInvalidPrice(price.getPrice()); // {} => { price size }
 			SizeValidator.rejectIfInvalidSize(price.getSize().getId());
+
+			// business validation - reject If Size Not Exists
 			SizeValidator.rejectIfSizeNotExists(price.getSize().getId());
 
 		}
+	}
+
+//	check if price not end date = null 
+	public static boolean checkIfPriceAldreadyExists(int productId, int sizeId) {
+		PriceDAO priceDao = new PriceDAO();
+		return priceDao.priceAldreadyExists(productId, sizeId);
+
+	}
+
+//	id {products_id : 1 , sizes_id = 2 , end_date = 23/04/2023} ==> false
+	public static void rejectIfPriceNotFound(int productId, int sizeId) {
+
+		if (!(checkIfPriceAldreadyExists(productId, sizeId))) {
+			throw new RuntimeException(
+					"price not found with end date as null for this product id " + productId + "and size id " + sizeId);
+		}
+
 	}
 
 }

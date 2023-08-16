@@ -4,7 +4,7 @@ import in.fssa.myfashionstudioapp.dao.CategoryDAO;
 
 public class CategoryValidator {
 
-	public static void validate(int id) throws Exception {
+	public static void rejectIfInvalidCategory(int id) throws Exception {
 
 		if (id < 0) {
 			throw new RuntimeException("Invalid id");

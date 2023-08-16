@@ -10,7 +10,8 @@ public class CategoryService {
 
 	public List<Category> findAllCatgegoryByGenderId(int id) throws Exception {
 
-		CategoryValidator.validate(id);
+		CategoryValidator.rejectIfCategoryNotExists(id);
+
 		CategoryDAO categoryDao = new CategoryDAO();
 
 		List<Category> categorylist = categoryDao.findAllCatgegoryByGenderId(id);

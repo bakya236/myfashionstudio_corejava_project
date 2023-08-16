@@ -1,10 +1,31 @@
 package in.fssa.myfashionstudioapp.validator;
 
+import in.fssa.myfashionstudioapp.dao.ProductDAO;
 import in.fssa.myfashionstudioapp.model.Product;
 
 public class ProductValidator {
 
-	public static void validateAll(Product newProduct) {
+	public static void rejectIfInvalidproduct(int productId) {
+
+		if (productId < 0) {
+			throw new RuntimeException("Invalid product id input");
+		}
+
+	}
+
+	public static boolean checkIfProductExits(int productId) {
+		ProductDAO productDao = new ProductDAO();
+		return productDao.productAldreadyExists(productId);
+	}
+
+	public static void rejectIfProductNotExists(int productId) {
+
+		if (!(checkIfProductExits(productId))) {
+			throw new RuntimeException("Size with ID " + productId + " does not exist");
+		}
+	}
+
+	public static void validateAll(Product newProduct) throws RuntimeException {
 
 		if (newProduct == null) {
 			throw new RuntimeException("Product cannot be Null");

@@ -23,7 +23,7 @@ public class Gender {
 
 	@Override
 	public String toString() {
-		return "Gender [name=" + name + "]";
+		return "Gender [id=" + id + ", name=" + name + "]";
 	}
 
 }

@@ -1,10 +1,10 @@
 package in.fssa.myfashionstudioapp.model;
 
 public class Product {
-	private int id;
-	private String name;
-	private String description;
-	private Category category = new Category();
+	protected int id;
+	protected String name;
+	protected String description;
+	protected Category category = new Category();
 
 	public int getId() {
 		return id;
@@ -40,7 +40,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [name=" + name + ", description=" + description + ", category_id=" + category + "]";
+		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", category=" + category + "]";
 	}
 
 }
