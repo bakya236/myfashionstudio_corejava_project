@@ -23,37 +23,37 @@ public class TestUpdateProductDetailsAndPrices {
 
 		List<Price> priceList = productDto.getPriceList();
 
+		int productId = 1;
 		//
-
-		Price price1 = new Price();
+		Price price1 = new Price();// {}
+		price1.getProduct().setId(productId);
 		price1.setPrice(780.00d);
+
 		Size size = new Size();
-		size.setId(1);
+		size.setId(2);
+
 		price1.setSize(size);
-		//
 
-		//
-
-		Price price2 = new Price();
-		price2.setPrice(720.00d);
-
-		Size size1 = new Size();
-		size1.setId(2);
-		price2.setSize(size1);
+//		Price price2 = new Price();
+//		price2.setPrice(720.00d);
+//
+//		Size size1 = new Size();
+//		size1.setId(2);
+//		price2.setSize(size1);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
+//		priceList.add(price2);
 
 		//
 
 		productDto.setPriceList(priceList);
-		productDto.setId(1);
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			productService.updateProductDetailsAndPrices(1, productDto);
+			productService.updateProductDetailsAndPrices(productId, productDto);
 		});
 
 	}

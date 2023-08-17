@@ -21,7 +21,7 @@ public class ProductValidator {
 	public static void rejectIfProductNotExists(int productId) {
 
 		if (!(checkIfProductExits(productId))) {
-			throw new RuntimeException("Size with ID " + productId + " does not exist");
+			throw new RuntimeException("Product Id with ID " + productId + " does not exist");
 		}
 	}
 
@@ -31,14 +31,11 @@ public class ProductValidator {
 			throw new RuntimeException("Product cannot be Null");
 		}
 		if (newProduct.getName() == null || "".equals(newProduct.getName())) {
-			throw new RuntimeException("product name cannot be null or empty");
+			throw new RuntimeException("Product name cannot be null or empty");
 		}
 		if (newProduct.getDescription() == null || "".equals(newProduct.getDescription())) {
-			throw new RuntimeException("product description cannot be null or empty");
+			throw new RuntimeException("Product description cannot be null or empty");
 		}
-
-		// business validation - category aldready exists
-		CategoryValidator.rejectIfCategoryNotExists(newProduct.getCategory().getId());
 
 	}
 

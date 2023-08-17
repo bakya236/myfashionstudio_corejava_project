@@ -3,7 +3,6 @@ package in.fssa.myfashionstudioapp.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.fssa.myfashionstudioapp.PriceValidator;
 import in.fssa.myfashionstudioapp.dao.ProductDAO;
 import in.fssa.myfashionstudioapp.dto.ProductDTO;
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
@@ -13,6 +12,7 @@ import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.model.Product;
 import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.validator.CategoryValidator;
+import in.fssa.myfashionstudioapp.validator.PriceValidator;
 import in.fssa.myfashionstudioapp.validator.ProductValidator;
 
 public class ProductService {
@@ -20,13 +20,12 @@ public class ProductService {
 	public void createProductWithPrices(ProductDTO newProduct) throws ValidationException, ServiceException {
 
 		try {
-			List<Price> priceList = newProduct.getPriceList();
 
 			// validation
 			ProductValidator.validateAll(newProduct);
+			CategoryValidator.rejectIfCategoryNotExists(newProduct.getCategory().getId());
 
-			// CategoryValidator.rejectIfCategoryNotExists(newProduct.getCategory().getId());
-
+			List<Price> priceList = newProduct.getPriceList();
 			PriceValidator.ValidateAll(priceList);
 
 			ProductDAO productDao = new ProductDAO();
@@ -35,6 +34,7 @@ public class ProductService {
 
 			int productId = productDao.create(newProduct);
 			PriceService priceService = new PriceService();
+
 			for (Price price : priceList) {
 
 				price.getProduct().setId(productId);
@@ -206,6 +206,10 @@ public class ProductService {
 
 	}
 
+	public void updateproductDetails(ProductDTO updatedProduct) throws ValidationException, ServiceException {
+
+	}
+
 	public void updateProductDetailsAndPrices(int id, ProductDTO updatedProduct) // updatedproduct
 																					// {name,description,pricelist}
 			throws ValidationException, ServiceException {
@@ -238,10 +242,26 @@ public class ProductService {
 
 			for (Price price : priceList) {
 
+				// return the price id where price product // price dao ()
+
+				int productId = id;
 				int sizeId = price.getSize().getId();
 
-				priceService.updateprice(id, sizeId); // update enddate = current date;
+				System.out.println(productId + " " + sizeId);
 
+				Price pricefromProdIdAndSizeId = priceService.findPriceBypProductIdAndSizeId(productId, sizeId);
+
+				System.out.println(pricefromProdIdAndSizeId);
+
+				// got price id from the price table
+
+				int priceId = pricefromProdIdAndSizeId.getId(); // null error
+
+				System.out.println(priceId);
+
+				priceService.updateprice(priceId); // update enddate = current date;
+
+				System.out.println(price.toString());
 				priceService.createPrice(price);
 			}
 

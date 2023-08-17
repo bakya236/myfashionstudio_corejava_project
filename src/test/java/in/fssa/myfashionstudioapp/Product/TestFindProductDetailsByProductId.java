@@ -13,7 +13,7 @@ public class TestFindProductDetailsByProductId {
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			productService.findProductDetailsByProductId(10);
+			productService.findProductDetailsByProductId(1);
 		});
 	}
 

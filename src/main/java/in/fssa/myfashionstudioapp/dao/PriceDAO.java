@@ -124,7 +124,7 @@ public class PriceDAO {
 		return priceList;
 	}
 
-	public void updateprice(int productId, int sizeId) throws PersistenceException {
+	public void updateprice(int priceId) throws PersistenceException {
 
 		System.out.println("in updateprice dao");
 
@@ -132,14 +132,13 @@ public class PriceDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String Query = "update prices set ended_at = now() where products_id = ? and sizes_id = ? ";
+			String Query = "update prices set ended_at = now() where id = ?";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(Query);
 
-			ps.setInt(1, productId);
-			ps.setDouble(2, sizeId);
+			ps.setInt(1, priceId);
 
 			ps.executeUpdate();
 
@@ -153,6 +152,53 @@ public class PriceDAO {
 			ConnectionUtil.close(con, ps);
 		}
 
+	}
+
+	public Price findPriceBypProductIdAndSizeId(int productId, int sizeId) throws PersistenceException {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Price price = null;
+
+		try {
+			String Query = "Select * from prices where products_id = ? and sizes_id = ? and ended_at is null";
+
+			con = ConnectionUtil.getConnection();
+
+			ps = con.prepareStatement(Query);
+
+			ps.setInt(1, productId);
+			ps.setDouble(2, sizeId);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				price = new Price();
+
+				price.setId(rs.getInt("id"));
+				price.setPrice(rs.getDouble("price"));
+				price.getProduct().setId(rs.getInt("products_id"));
+				price.getSize().setId(rs.getInt("sizes_id"));
+
+				System.out.println(price);
+
+				System.out.println("found the price with end date null");
+			} else {
+				System.out.println("price not found with end date null");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new RuntimeException(e);
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		System.out.println("find:" + price);
+
+		return price;
 	}
 
 	// business validation - price Aldready Exists // enddate is null
