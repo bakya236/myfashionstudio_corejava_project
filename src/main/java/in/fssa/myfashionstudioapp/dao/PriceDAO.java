@@ -13,6 +13,11 @@ import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class PriceDAO {
 
+	/**
+	 * 
+	 * @param price
+	 * @throws PersistenceException
+	 */
 	public void createPrice(Price price) throws PersistenceException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -41,6 +46,12 @@ public class PriceDAO {
 		}
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public Price FindFirstPriceByProductId(int id) throws PersistenceException {
 
 		Connection con = null;
@@ -62,9 +73,13 @@ public class PriceDAO {
 			if (rs.next()) {
 				// There is at least one row
 				price = new Price();
+
+				price.setId(id);
 				price.getProduct().setId(rs.getInt("products_id"));
 				price.getSize().setId(rs.getInt("sizes_id"));
 				price.setPrice(rs.getDouble("price"));
+				price.setStartDate(rs.getDate("started_at"));
+				price.setEndDate(rs.getDate("ended_at"));
 
 				System.out.println("Retrieved price details");
 			} else {
@@ -83,6 +98,12 @@ public class PriceDAO {
 
 //	doubt on exception handling
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public List<Price> FindAllPricesByProductId(int id) throws PersistenceException {
 
 		Connection con = null;
@@ -104,9 +125,12 @@ public class PriceDAO {
 			while (rs.next()) {
 				Price price = new Price();
 
+				price.setId(id);
 				price.getProduct().setId(rs.getInt("products_id"));
 				price.getSize().setId(rs.getInt("sizes_id"));
 				price.setPrice(rs.getDouble("price"));
+				price.setStartDate(rs.getDate("started_at"));
+				price.setEndDate(rs.getDate("ended_at"));
 
 				priceList.add(price);
 
@@ -124,6 +148,11 @@ public class PriceDAO {
 		return priceList;
 	}
 
+	/**
+	 * 
+	 * @param priceId
+	 * @throws PersistenceException
+	 */
 	public void updateprice(int priceId) throws PersistenceException {
 
 		System.out.println("in updateprice dao");
@@ -153,6 +182,14 @@ public class PriceDAO {
 		}
 
 	}
+
+	/**
+	 * 
+	 * @param productId
+	 * @param sizeId
+	 * @return
+	 * @throws PersistenceException
+	 */
 
 	public Price findPriceBypProductIdAndSizeId(int productId, int sizeId) throws PersistenceException {
 
@@ -205,6 +242,12 @@ public class PriceDAO {
 
 	// {price , enddate : null} ==> true
 
+	/**
+	 * 
+	 * @param productId
+	 * @param sizeId
+	 * @return
+	 */
 	public boolean priceAldreadyExists(int productId, int sizeId) {
 
 		Connection con = null;

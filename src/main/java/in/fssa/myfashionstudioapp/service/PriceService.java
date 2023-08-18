@@ -13,7 +13,12 @@ import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.validator.PriceValidator;
 
 public class PriceService {
-
+	/**
+	 * 
+	 * @param price
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 	public void createPrice(Price price) throws ValidationException, ServiceException {
 
 		System.out.println("in create ");
@@ -35,6 +40,12 @@ public class PriceService {
 
 	// check this method
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Price FindFirstPriceByProductId(int id) throws ServiceException {
 		Price price = null;
 		try {
@@ -48,6 +59,13 @@ public class PriceService {
 		return price;
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+
 	public List<Price> FindAllPricesByProductId(int id) throws ServiceException {
 
 		try {
@@ -59,6 +77,12 @@ public class PriceService {
 		}
 	}
 
+	/**
+	 * 
+	 * @param priceId
+	 * @throws ServiceException
+	 */
+
 	public void updateprice(int priceId) throws ServiceException {
 
 		// ask - need for form validation
@@ -68,8 +92,6 @@ public class PriceService {
 		try {
 
 			// again checking form validation
-
-			// TODO check whether the price you are updating is same as the existing price
 
 			PriceDAO priceDao = new PriceDAO();
 			System.out.println("in update price service way to dao");
@@ -82,6 +104,13 @@ public class PriceService {
 
 	}
 
+	/**
+	 * 
+	 * @param productId
+	 * @param sizeId
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Price findPriceBypProductIdAndSizeId(int productId, int sizeId) throws ServiceException {
 		Price price = null;
 

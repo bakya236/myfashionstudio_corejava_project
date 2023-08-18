@@ -1,6 +1,6 @@
 package in.fssa.myfashionstudioapp.model;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public class Price {
 
@@ -8,8 +8,8 @@ public class Price {
 	private Product product = new Product();
 	private Size size = new Size();
 	private double price;
-	private LocalDateTime startDate;
-	private LocalDateTime endDate;
+	private Date startDate;
+	private Date endDate;
 
 	public int getId() {
 		return id;
@@ -43,26 +43,26 @@ public class Price {
 		this.price = price;
 	}
 
-	public LocalDateTime getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
+	public void setStartDate(Date date) {
+		this.startDate = date;
 	}
 
-	public LocalDateTime getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDateTime endDate) {
-		this.endDate = endDate;
+	public void setEndDate(Date date) {
+		this.endDate = date;
 	}
 
 	@Override
 	public String toString() {
-		return "Price [id=" + id + ", product=" + product + ", size=" + size + ", price=" + price + ", startDate="
-				+ startDate + ", endDate=" + endDate + "]";
+		return "Price [id=" + id + " size=" + size + ", price=" + price + ", startDate=" + startDate + ", endDate="
+				+ endDate + "]";
 	}
 
 }

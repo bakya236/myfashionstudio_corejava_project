@@ -23,6 +23,7 @@ public class TestUpdateProductDetailsAndPrices {
 
 		List<Price> priceList = productDto.getPriceList();
 
+		// product id
 		int productId = 1;
 		//
 		Price price1 = new Price();// {}

@@ -8,7 +8,12 @@ public class PriceValidator {
 
 	// rejectIfInvalidPrice
 
-	public static void rejectIfInvalidPrice(Double price) {
+	/**
+	 * 
+	 * @param price
+	 * @throws RuntimeException
+	 */
+	public static void rejectIfInvalidPrice(Double price) throws RuntimeException {
 		if (price <= 0.0d || price >= 10000.0d) {
 			throw new RuntimeException("Invalid price input");
 		}
@@ -16,6 +21,11 @@ public class PriceValidator {
 	}
 
 	// validate price for creating price
+
+	/**
+	 * 
+	 * @param price
+	 */
 	public static void Validate(Price price) { // {} => { price, size }
 
 		PriceValidator.rejectIfInvalidPrice(price.getPrice());

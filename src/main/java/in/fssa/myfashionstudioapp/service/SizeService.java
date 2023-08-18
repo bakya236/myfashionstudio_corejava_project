@@ -7,19 +7,22 @@ import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.validator.SizeValidator;
 
 public class SizeService {
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Size FindSizeBySizeId(int id) throws ServiceException {
-		Size size = null;
+
 		try {
 			SizeValidator.rejectIfInvalidSize(id);
 			SizeDAO sizeDao = new SizeDAO();
-
-			size = sizeDao.FindSizeBySizeId(id);
-
+			return sizeDao.FindSizeBySizeId(id);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
 
-		return size;
 	}
 }

@@ -8,6 +8,8 @@ import in.fssa.myfashionstudioapp.dto.ProductDTO;
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.exception.ServiceException;
 import in.fssa.myfashionstudioapp.exception.ValidationException;
+import in.fssa.myfashionstudioapp.model.Category;
+import in.fssa.myfashionstudioapp.model.Gender;
 import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.model.Product;
 import in.fssa.myfashionstudioapp.model.Size;
@@ -16,7 +18,12 @@ import in.fssa.myfashionstudioapp.validator.PriceValidator;
 import in.fssa.myfashionstudioapp.validator.ProductValidator;
 
 public class ProductService {
-
+	/**
+	 * 
+	 * @param newProduct
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 	public void createProductWithPrices(ProductDTO newProduct) throws ValidationException, ServiceException {
 
 		try {
@@ -33,6 +40,7 @@ public class ProductService {
 			// create the product, get the generated product id
 
 			int productId = productDao.create(newProduct);
+
 			PriceService priceService = new PriceService();
 
 			for (Price price : priceList) {
@@ -57,6 +65,12 @@ public class ProductService {
 
 	// findAllProductsWithFirstPriceAndSize
 
+	/**
+	 * 
+	 * @return
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 	public List<ProductDTO> findAllProducts() throws ValidationException, ServiceException {
 
 		List<ProductDTO> productDtoList = new ArrayList<>();
@@ -69,19 +83,37 @@ public class ProductService {
 
 			for (Product product : ProductList) {
 
+				// product ==> {id,name,description,category}
+
 				ProductDTO productDto = new ProductDTO();
+
+				// set category name
+				CategoryService categoryService = new CategoryService();
+				Category category = categoryService.findCategoryByCategoryId(product.getCategory().getId());
+
+				// set gender name
+				GenderService genderService = new GenderService();
+				Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
+				category.setGender(gender);
+
+				// set the gender name
 
 				List<Price> priceList = productDto.getPriceList();
 
 				PriceService priceService = new PriceService();
-				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId());
+				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId()); // {price,products_id,sizes_id,started_at,ended_at}
+
+				// set size value
+				SizeService sizeService = new SizeService();
+				Size size = sizeService.FindSizeBySizeId(eachPrice.getSize().getId());
+				eachPrice.setSize(size);
 
 				priceList.add(eachPrice);
 
 				productDto.setId(product.getId());
 				productDto.setName(product.getName());
 				productDto.setDescription(product.getDescription());
-				productDto.setCategory(product.getCategory());
+				productDto.setCategory(category);
 				productDto.setPriceList(priceList);
 
 				productDtoList.add(productDto);
@@ -108,6 +140,13 @@ public class ProductService {
 
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 	public ProductDTO findProductDetailsByProductId(int id) throws ValidationException, ServiceException {
 
 		ProductDTO productDto = null;
@@ -120,6 +159,18 @@ public class ProductService {
 			ProductDAO productDAO = new ProductDAO();
 
 			productDto = productDAO.findProductDetailsByProductId(id); // {name,description,category,pricelist[]}
+
+			// set category name
+			CategoryService categoryService = new CategoryService();
+			Category category = categoryService.findCategoryByCategoryId(productDto.getCategory().getId());
+
+			// set gender name
+			GenderService genderService = new GenderService();
+			Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
+
+			category.setGender(gender);
+
+			productDto.setCategory(category);
 
 			PriceService PriceService = new PriceService();
 			productDto.setPriceList(PriceService.FindAllPricesByProductId(id)); // pricelist[{id,size_id,price},{},{}]
@@ -149,6 +200,14 @@ public class ProductService {
 		return productDto;
 
 	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 
 	public List<ProductDTO> findAllProductsByCategoryId(int id) throws ValidationException, ServiceException {
 
@@ -206,10 +265,13 @@ public class ProductService {
 
 	}
 
-	public void updateproductDetails(ProductDTO updatedProduct) throws ValidationException, ServiceException {
-
-	}
-
+	/**
+	 * 
+	 * @param id
+	 * @param updatedProduct
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
 	public void updateProductDetailsAndPrices(int id, ProductDTO updatedProduct) // updatedproduct
 																					// {name,description,pricelist}
 			throws ValidationException, ServiceException {
@@ -253,16 +315,16 @@ public class ProductService {
 
 				System.out.println(pricefromProdIdAndSizeId);
 
-				// got price id from the price table
+				if (pricefromProdIdAndSizeId.getPrice() != price.getPrice()) {
+					int priceId = pricefromProdIdAndSizeId.getId(); // null error
 
-				int priceId = pricefromProdIdAndSizeId.getId(); // null error
+					System.out.println(priceId);
+					priceService.updateprice(priceId); // update enddate = current date;
 
-				System.out.println(priceId);
+					System.out.println(price.toString());
+					priceService.createPrice(price);
+				}
 
-				priceService.updateprice(priceId); // update enddate = current date;
-
-				System.out.println(price.toString());
-				priceService.createPrice(price);
 			}
 
 			System.out.println("product and its prices updated successfully");

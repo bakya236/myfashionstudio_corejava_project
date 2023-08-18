@@ -14,6 +14,12 @@ import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class ProductDAO {
 
+	/**
+	 * 
+	 * @param newProduct
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public int create(Product newProduct) throws PersistenceException {
 
 		Connection con = null;
@@ -59,6 +65,11 @@ public class ProductDAO {
 
 //	find all products 
 
+	/**
+	 * 
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public List<ProductDTO> findAllProducts() throws PersistenceException {
 
 		Connection con = null;
@@ -83,9 +94,8 @@ public class ProductDAO {
 				productDto.setDescription(rs.getString("description"));
 				productDto.getCategory().setId(rs.getInt("categories_id"));
 
-//				how will i set the category name  
-
 				productDtoList.add(productDto);
+
 			}
 
 		} catch (SQLException e) {
@@ -100,6 +110,12 @@ public class ProductDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public ProductDTO findProductDetailsByProductId(int id) throws PersistenceException {
 
 		Connection con = null;
@@ -139,6 +155,12 @@ public class ProductDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public List<ProductDTO> findAllProductsByCategoryId(int id) throws PersistenceException {
 
 		Connection con = null;
@@ -181,6 +203,12 @@ public class ProductDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @param updatedProduct
+	 * @throws PersistenceException
+	 */
 	public void updateProductDetails(int id, ProductDTO updatedProduct) throws PersistenceException {
 
 		Connection con = null;
@@ -213,6 +241,11 @@ public class ProductDAO {
 
 	// business validation - product aldready exists
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public boolean productAldreadyExists(int id) {
 
 		Connection con = null;

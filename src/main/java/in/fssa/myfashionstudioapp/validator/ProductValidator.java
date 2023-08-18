@@ -5,7 +5,12 @@ import in.fssa.myfashionstudioapp.model.Product;
 
 public class ProductValidator {
 
-	public static void rejectIfInvalidproduct(int productId) {
+	/**
+	 * 
+	 * @param productId
+	 * @throws RuntimeException
+	 */
+	public static void rejectIfInvalidproduct(int productId) throws RuntimeException {
 
 		if (productId < 0) {
 			throw new RuntimeException("Invalid product id input");
@@ -18,6 +23,10 @@ public class ProductValidator {
 		return productDao.productAldreadyExists(productId);
 	}
 
+	/**
+	 * 
+	 * @param productId
+	 */
 	public static void rejectIfProductNotExists(int productId) {
 
 		if (!(checkIfProductExits(productId))) {
@@ -25,6 +34,11 @@ public class ProductValidator {
 		}
 	}
 
+	/**
+	 * 
+	 * @param newProduct
+	 * @throws RuntimeException
+	 */
 	public static void validateAll(Product newProduct) throws RuntimeException {
 
 		if (newProduct == null) {

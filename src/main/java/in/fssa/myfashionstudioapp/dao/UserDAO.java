@@ -12,6 +12,11 @@ import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class UserDAO {
 
+	/**
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<User> findAll() throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;

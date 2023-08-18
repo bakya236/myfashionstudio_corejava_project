@@ -10,7 +10,12 @@ import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class SizeDAO {
-
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws PersistenceException
+	 */
 	public Size FindSizeBySizeId(int id) throws PersistenceException {
 
 		Connection con = null;
@@ -29,6 +34,8 @@ public class SizeDAO {
 
 			rs = ps.executeQuery();
 
+			System.out.println(rs.next());
+
 			if (rs.next()) {
 				size = new Size();
 
@@ -40,14 +47,23 @@ public class SizeDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
+
+		System.out.println(size);
 		return size;
 	}
 
-	public boolean sizeAldreadyExists(int id) {
+	// business validation
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean SizeAldreadyExists(int id) {
 
 		Connection con = null;
 		PreparedStatement ps = null;
