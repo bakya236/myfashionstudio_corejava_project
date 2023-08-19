@@ -4,12 +4,57 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class SizeDAO {
+
+	/**
+	 * 
+	 * @return
+	 * @throws PersistenceException
+	 */
+
+	public List<Size> findAllSize() throws PersistenceException {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Size> sizeList = new ArrayList<>();
+
+		try {
+			con = ConnectionUtil.getConnection();
+			String query = "Select * From sizes";
+
+			ps = con.prepareStatement(query);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				Size size = new Size();
+
+				size.setId(rs.getInt("id"));
+				size.setValue(rs.getString("value"));
+
+				sizeList.add(size);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return sizeList;
+
+	}
+
 	/**
 	 * 
 	 * @param id
@@ -34,14 +79,11 @@ public class SizeDAO {
 
 			rs = ps.executeQuery();
 
-			System.out.println(rs.next());
-
 			if (rs.next()) {
 				size = new Size();
 
-				size.setId(id);
+				size.setId(rs.getInt("id"));
 				size.setValue(rs.getString("value"));
-
 			}
 
 		} catch (SQLException e) {
@@ -63,7 +105,7 @@ public class SizeDAO {
 	 * @param id
 	 * @return
 	 */
-	public boolean SizeAldreadyExists(int id) {
+	public boolean SizeAldreadyExists(int id) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -86,7 +128,7 @@ public class SizeDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}

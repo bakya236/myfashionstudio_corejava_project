@@ -1,5 +1,6 @@
 package in.fssa.myfashionstudioapp.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.model.Product;
 import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.validator.CategoryValidator;
+import in.fssa.myfashionstudioapp.validator.GenderValidator;
 import in.fssa.myfashionstudioapp.validator.PriceValidator;
 import in.fssa.myfashionstudioapp.validator.ProductValidator;
 
@@ -23,6 +25,8 @@ public class ProductService {
 	 * @param newProduct
 	 * @throws ValidationException
 	 * @throws ServiceException
+	 * @throws com.google.protobuf.ServiceException
+	 * @throws com.google.protobuf.ServiceException
 	 */
 	public void createProductWithPrices(ProductDTO newProduct) throws ValidationException, ServiceException {
 
@@ -30,7 +34,21 @@ public class ProductService {
 
 			// validation
 			ProductValidator.validateAll(newProduct);
-			CategoryValidator.rejectIfCategoryNotExists(newProduct.getCategory().getId());
+
+			int categoryId = newProduct.getCategory().getId();
+
+			CategoryValidator.rejectIfInvalidCategory(categoryId);
+			CategoryValidator.rejectIfCategoryNotExists(categoryId);
+
+			// find the category
+
+			CategoryService categoryService = new CategoryService();
+			Category category = categoryService.findCategoryByCategoryId(categoryId);
+
+			int genderId = category.getGender().getId();
+
+			GenderValidator.rejectIfInvalidGender(genderId);
+			GenderValidator.rejectIfGenderNotExists(genderId);
 
 			List<Price> priceList = newProduct.getPriceList();
 			PriceValidator.ValidateAll(priceList);
@@ -45,18 +63,22 @@ public class ProductService {
 
 			for (Price price : priceList) {
 
-				price.getProduct().setId(productId);
+				Product product = new Product();
+				product.setId(productId);
+
+				price.setProduct(product);
 
 				priceService.createPrice(price);
 			}
 
 			System.out.println("product and its prices created successfully");
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			// Handle validation errors (e.g., provide user-friendly error messages)
+			throw new ValidationException("Validation error: " + e.getMessage());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error creating product and prices: " + e.getMessage());
-		} catch (Exception e) {
-			// Handle validation errors (e.g., provide user-friendly error messages)
-			throw new ValidationException("Validation error: " + e.getMessage());
 		}
 
 	}
@@ -271,69 +293,76 @@ public class ProductService {
 	 * @param updatedProduct
 	 * @throws ValidationException
 	 * @throws ServiceException
+	 * @throws com.google.protobuf.ServiceException
 	 */
-	public void updateProductDetailsAndPrices(int id, ProductDTO updatedProduct) // updatedproduct
-																					// {name,description,pricelist}
-			throws ValidationException, ServiceException {
+	public void updateProductDetailsAndPrices(ProductDTO updatedProduct) // updatedproduct
+																			// {name,description,pricelist}
+			throws ValidationException, ServiceException, com.google.protobuf.ServiceException {
 
 		try {
 
-			// validation
-			ProductValidator.rejectIfInvalidproduct(id);
-
-//			business validation - reject If Product Not Exists
-			ProductValidator.rejectIfProductNotExists(id);
-
 			ProductValidator.validateAll(updatedProduct);
 
-//			business validation - reject If Category Not Exists in category table
-			// CategoryValidator.rejectIfCategoryNotExists(newProduct.getCategory().getId());
+			int productId = updatedProduct.getId();
+
+			// validation
+			ProductValidator.rejectIfInvalidproduct(productId);
+
+//			business validation - reject If Product Not Exists
+			ProductValidator.rejectIfProductNotExists(productId);
+
+			int categoryId = updatedProduct.getCategory().getId();
+
+			CategoryValidator.rejectIfInvalidCategory(categoryId);
+			CategoryValidator.rejectIfCategoryNotExists(categoryId);
+
+			// find the category
+
+			CategoryService categoryService = new CategoryService();
+			Category category = categoryService.findCategoryByCategoryId(categoryId);
+
+			int genderId = category.getGender().getId();
+
+			GenderValidator.rejectIfInvalidGender(genderId);
+			GenderValidator.rejectIfGenderNotExists(genderId);
 
 			// validating the price in price service - update price()
 			List<Price> priceList = updatedProduct.getPriceList();
-
-			System.out.println("priceList" + priceList);
 
 			PriceValidator.ValidateAll(priceList);
 
 			ProductDAO productDao = new ProductDAO();
 
-			productDao.updateProductDetails(id, updatedProduct);
+			productDao.updateProductDetails(updatedProduct);
 
 			PriceService priceService = new PriceService();
 
 			for (Price price : priceList) {
 
-				// return the price id where price product // price dao ()
-
-				int productId = id;
 				int sizeId = price.getSize().getId();
-
-				System.out.println(productId + " " + sizeId);
 
 				Price pricefromProdIdAndSizeId = priceService.findPriceBypProductIdAndSizeId(productId, sizeId);
 
-				System.out.println(pricefromProdIdAndSizeId);
+				LocalDateTime date = LocalDateTime.now();
+				java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
 
 				if (pricefromProdIdAndSizeId.getPrice() != price.getPrice()) {
 					int priceId = pricefromProdIdAndSizeId.getId(); // null error
 
-					System.out.println(priceId);
-					priceService.updateprice(priceId); // update enddate = current date;
+					priceService.updateprice(priceId, dateTime); // update enddate = current date;
 
-					System.out.println(price.toString());
 					priceService.createPrice(price);
 				}
 
 			}
 
 			System.out.println("product and its prices updated successfully");
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new ValidationException("Validation error: " + e.getMessage());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error updating product and prices: " + e.getMessage());
-		} catch (Exception e) {
-			// Handle validation errors (e.g., provide user-friendly error messages)
-			throw new ValidationException("Validation error: " + e.getMessage());
 		}
 
 	}

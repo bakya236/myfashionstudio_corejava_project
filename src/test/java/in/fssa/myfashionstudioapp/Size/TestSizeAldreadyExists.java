@@ -1,12 +1,16 @@
 package in.fssa.myfashionstudioapp.Size;
 
-import org.junit.jupiter.api.Test;
-
 public class TestSizeAldreadyExists {
 
-	@Test
-	public void SizeAldreadyExists() {
-
-	}
+//	@Test
+//	public void sizeAldreadyExists() {
+//		SizeService sizeservice = new SizeService();
+//
+//		assertDoesNotThrow(() -> {
+//			boolean size = sizeservice.sizeAldreadyExists(1);
+//			categoryList.forEach(System.out::println);
+//		});
+//
+//	}
 
 }

@@ -1,6 +1,6 @@
 package in.fssa.myfashionstudioapp.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Price {
 
@@ -8,8 +8,8 @@ public class Price {
 	private Product product = new Product();
 	private Size size = new Size();
 	private double price;
-	private Date startDate;
-	private Date endDate;
+	private Timestamp startedAt;
+	private Timestamp endedAt;
 
 	public int getId() {
 		return id;
@@ -43,26 +43,26 @@ public class Price {
 		this.price = price;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Timestamp getStartedAt() {
+		return startedAt;
 	}
 
-	public void setStartDate(Date date) {
-		this.startDate = date;
+	public void setStartedAt(Timestamp startedAt) {
+		this.startedAt = startedAt;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+	public Timestamp getEndedAt() {
+		return endedAt;
 	}
 
-	public void setEndDate(Date date) {
-		this.endDate = date;
+	public void setEndedAt(Timestamp endedAt) {
+		this.endedAt = endedAt;
 	}
 
 	@Override
 	public String toString() {
-		return "Price [id=" + id + " size=" + size + ", price=" + price + ", startDate=" + startDate + ", endDate="
-				+ endDate + "]";
+		return "Price [id=" + id + ", size=" + size + ", price=" + price + ", startedAt=" + startedAt + ", endedAt="
+				+ endedAt + "]";
 	}
 
 }

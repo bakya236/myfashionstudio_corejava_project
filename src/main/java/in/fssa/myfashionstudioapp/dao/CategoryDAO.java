@@ -39,7 +39,7 @@ public class CategoryDAO {
 
 				Category category = new Category();
 
-				category.setId(id);
+				category.setId(rs.getInt("id"));
 				category.setName(rs.getString("category_name"));
 
 				Gender gender = new Gender();
@@ -117,7 +117,7 @@ public class CategoryDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public boolean categoryAldreadyExists(int id) throws PersistenceException {
+	public boolean categoryAlreadyExists(int id) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -140,7 +140,7 @@ public class CategoryDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}

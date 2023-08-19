@@ -39,7 +39,7 @@ public class GenderService {
 	public Gender findGenderBygenderId(int id) throws ValidationException, ServiceException {
 
 		try {
-			GenderValidator.validate(id);
+			GenderValidator.rejectIfInvalidGender(id);
 			GenderDAO genderDao = new GenderDAO();
 
 			return genderDao.findById(id);

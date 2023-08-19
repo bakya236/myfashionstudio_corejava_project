@@ -12,17 +12,64 @@ import in.fssa.myfashionstudioapp.dto.ProductDTO;
 import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Category;
 import in.fssa.myfashionstudioapp.model.Price;
+import in.fssa.myfashionstudioapp.model.Product;
 import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.service.ProductService;
 
-public class TestCreateProduct {
+public class TestUpdateProduct {
+
+//	@Test
+//	public void UpdateProductWithValidInput() {
+//		ProductDTO productDto = new ProductDTO();
+//
+//		productDto.setName("black printed t-shirt");
+//		productDto.setDescription("regular black printed rounded neck t-shirt");
+//		productDto.getCategory().setId(2);
+//
+//		List<Price> priceList = productDto.getPriceList();
+//
+//		// product id
+//		int productId = 1;
+//		//
+//		Price price1 = new Price();// {}
+//		price1.getProduct().setId(productId);
+//		price1.setPrice(730.00d);
+//
+//		Size size = new Size();
+//		size.setId(2);
+//
+//		price1.setSize(size);
+//
+////
+////		Price price2 = new Price();// {}
+////		price2.getProduct().setId(productId);
+////		price2.setPrice(200.00d);
+////
+////		Size size2 = new Size();
+////		size2.setId(1);
+////
+////		price2.setSize(size2);
+//
+//		priceList.add(price1);
+////		priceList.add(price2);
+//
+//		productDto.setPriceList(priceList);
+//		productDto.setId(productId);
+//
+//		ProductService productService = new ProductService();
+//
+//		assertDoesNotThrow(() -> {
+//			productService.updateProductDetailsAndPrices(productDto);
+//		});
+//
+//	}
 
 	@Test
-	public void createProductWithValidInput() {
-
-		// create the dto instance
+	public void updateProductWithValidInput() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -33,7 +80,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00d);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -43,11 +94,14 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
@@ -57,24 +111,25 @@ public class TestCreateProduct {
 		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt ");
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 		});
 	}
 
 	@Test
-	public void createProductWithInvalidInput() {
+	public void updateProductWithInvalidInput() {
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(null);
+			productService.updateProductDetailsAndPrices(null);
 
 		});
 
@@ -87,11 +142,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductNameWithNull() {
-
-		// create the dto instance
+	public void updateProductNameWithNull() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -102,7 +157,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00d);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -112,11 +171,14 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
@@ -127,13 +189,14 @@ public class TestCreateProduct {
 
 		productDto.setCategory(category);
 		productDto.setName(null);
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt ");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -147,11 +210,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductNameWithEmpty() {
-
-		// create the dto instance
+	public void updateProductNameWithEmpty() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -162,7 +225,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00d);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -172,11 +239,14 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
@@ -187,13 +257,14 @@ public class TestCreateProduct {
 
 		productDto.setCategory(category);
 		productDto.setName("");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt ");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -207,11 +278,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductDescriptionWithNull() {
-
-		// create the dto instance
+	public void updateProductDescriptionWithNull() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -222,7 +293,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00d);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -232,11 +307,14 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
@@ -246,14 +324,14 @@ public class TestCreateProduct {
 		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
+		productDto.setName("Black t-shirt");
 		productDto.setDescription(null);
-
+		productDto.setId(productId);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -267,11 +345,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductDescriptionWithEmpty() {
-
-		// create the dto instance
+	public void updateProductDescriptionWithEmpty() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -282,7 +360,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00d);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -292,11 +374,14 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
@@ -306,14 +391,14 @@ public class TestCreateProduct {
 		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
+		productDto.setName("Black t-shirt");
 		productDto.setDescription("");
-
+		productDto.setId(productId);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -327,11 +412,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductWithInvalidCategory() {
-
-		// create the dto instance
+	public void updateProductWithInvalidproductId() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = -1;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -342,7 +427,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00d);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -352,7 +441,145 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
+		//
+
+		priceList.add(price1);
+
+		//
+
+		productDto.setPriceList(priceList);
+
+		Category category = new Category();
+		category.setId(1);
+
+		productDto.setCategory(category);
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
+		ProductService productService = new ProductService();
+
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			productService.updateProductDetailsAndPrices(productDto);
+
+		});
+
+		String ExpectedMessage = "Validation error: Invalid product input";
+		String actualMessage = exception.getMessage();
+
+		System.out.println(actualMessage);
+
+		assertTrue(ExpectedMessage.equals(actualMessage));
+
+	}
+
+	@Test
+	public void updateProductWithProductDoesNotExists() {
+
+		ProductDTO productDto = new ProductDTO();
+
+		int productId = 110;
+
+		List<Price> priceList = productDto.getPriceList();
+
+		//
+		Price price1 = new Price();
+
+		Size size1 = new Size();
+		size1.setId(1);
+
+		price1.setSize(size1);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
+		//
+
+		//
+		Price price2 = new Price();
+
+		Size size2 = new Size();
+		size2.setId(2);
+
+		price2.setSize(size2);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
+		//
+
+		priceList.add(price1);
+
+		//
+
+		productDto.setPriceList(priceList);
+
+		Category category = new Category();
+		category.setId(1);
+
+		productDto.setCategory(category);
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
+		ProductService productService = new ProductService();
+
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			productService.updateProductDetailsAndPrices(productDto);
+
+		});
+
+		String ExpectedMessage = "Validation error: Product Id with ID " + productId + " does not exist";
+		String actualMessage = exception.getMessage();
+
+		System.out.println(actualMessage);
+
+		assertTrue(ExpectedMessage.equals(actualMessage));
+
+	}
+
+	@Test
+	public void updateProductWithInvalidCategory() {
+
+		ProductDTO productDto = new ProductDTO();
+
+		int productId = 1;
+
+		List<Price> priceList = productDto.getPriceList();
+
+		//
+		Price price1 = new Price();
+
+		Size size1 = new Size();
+		size1.setId(1);
+
+		price1.setSize(size1);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
+		//
+
+		//
+		Price price2 = new Price();
+
+		Size size2 = new Size();
+		size2.setId(2);
+
+		price2.setSize(size2);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
@@ -362,20 +589,20 @@ public class TestCreateProduct {
 
 		productDto.setPriceList(priceList);
 
-		int invalidCategoryId = -1;
+		int categoryId = -1; //
 		Category category = new Category();
-		category.setId(invalidCategoryId);
+		category.setId(categoryId);
 
 		productDto.setCategory(category);
-
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -389,75 +616,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductCategoryDoesNotExist() {
-
-		// create the dto instance
+	public void updateProductCategoryDoesNotExist() {
 
 		ProductDTO productDto = new ProductDTO();
 
-		List<Price> priceList = productDto.getPriceList();
-
-		//
-		Price price1 = new Price();
-
-		Size size1 = new Size();
-		size1.setId(1);
-
-		price1.setSize(size1);
-		price1.setPrice(600.00d);
-		//
-
-		//
-		Price price2 = new Price();
-
-		Size size2 = new Size();
-		size2.setId(2);
-
-		price2.setSize(size2);
-		price2.setPrice(290.00d);
-		//
-
-		priceList.add(price1);
-		priceList.add(price2);
-
-		//
-
-		productDto.setPriceList(priceList);
-
-		int invalidCategoryId = 15;
-		Category category = new Category();
-		category.setId(invalidCategoryId);
-
-		productDto.setCategory(category);
-
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
-
-		ProductService productService = new ProductService();
-
-		Exception exception = assertThrows(ValidationException.class, () -> {
-
-			productService.createProductWithPrices(productDto);
-
-		});
-
-		String ExpectedMessage = "Validation error: Category with ID " + invalidCategoryId + " does not exist";
-		String actualMessage = exception.getMessage();
-
-		System.out.println(actualMessage);
-
-		assertTrue(ExpectedMessage.equals(actualMessage));
-
-	}
-
-	// testing the gender_id forign key
-
-	@Test
-	public void createProductwithInvalidPriceNull() {
-
-		// create the dto instance
-
-		ProductDTO productDto = new ProductDTO();
+		int productId = 1;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -469,6 +632,10 @@ public class TestCreateProduct {
 
 		price1.setSize(size1);
 		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -478,24 +645,105 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
-		priceList.add(null);
+		priceList.add(price1);
 		priceList.add(price2);
 
 		//
 
 		productDto.setPriceList(priceList);
-		productDto.getCategory().setId(1);
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
+
+		int categoryId = 79; //
+		Category category = new Category();
+		category.setId(categoryId);
+
+		productDto.setCategory(category);
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
+
+		});
+
+		String ExpectedMessage = "Validation error: Category with ID " + categoryId + " does not exist";
+		;
+		String actualMessage = exception.getMessage();
+
+		System.out.println(actualMessage);
+
+		assertTrue(ExpectedMessage.equals(actualMessage));
+
+	}
+
+	// testing the gender_id forign key
+
+	@Test
+	public void updateProductwithInvalidPriceNull() {
+		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
+
+		List<Price> priceList = productDto.getPriceList();
+
+		//
+		Price price1 = new Price();
+
+		Size size1 = new Size();
+		size1.setId(1);
+
+		price1.setSize(size1);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
+		//
+
+		//
+		Price price2 = new Price();
+
+		Size size2 = new Size();
+		size2.setId(2);
+
+		price2.setSize(size2);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
+		//
+
+		priceList.add(null); //
+		priceList.add(price2);
+
+		//
+
+		productDto.setPriceList(priceList);
+
+		Category category = new Category();
+		category.setId(1);
+
+		productDto.setCategory(category);
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
+
+		ProductService productService = new ProductService();
+
+		Exception exception = assertThrows(ValidationException.class, () -> {
+
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -509,11 +757,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductWithInvalidPricebelow100() {
-
-		// create the dto instance
+	public void updateProductWithInvalidPricebelow100() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -524,7 +772,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(0.0);
+		price1.setPrice(0.000d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -534,30 +786,32 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
 		productDto.setPriceList(priceList);
-		int CategoryId = 1;
 
-		productDto.setPriceList(priceList);
 		Category category = new Category();
-		category.setId(CategoryId);
+		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -571,11 +825,11 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductWithInvalidPriceAbove10000() {
-
-		// create the dto instance
+	public void updateProductWithInvalidPriceAbove10000() {
 
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -586,7 +840,11 @@ public class TestCreateProduct {
 		size1.setId(1);
 
 		price1.setSize(size1);
-		price1.setPrice(120.00d);
+		price1.setPrice(10000000.000d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -596,30 +854,32 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(100000.00);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
-		priceList.add(price2);
 
 		//
 
 		productDto.setPriceList(priceList);
-		int CategoryId = 1;
 
-		productDto.setPriceList(priceList);
 		Category category = new Category();
-		category.setId(CategoryId);
+		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -633,11 +893,10 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductWithInvalidSizeInput() {
-
-		// create the dto instance
-
+	public void updateProductWithInvalidSizeInput() {
 		ProductDTO productDto = new ProductDTO();
+
+		int productId = 3;
 
 		List<Price> priceList = productDto.getPriceList();
 
@@ -648,7 +907,11 @@ public class TestCreateProduct {
 		size1.setId(-1);
 
 		price1.setSize(size1);
-		price1.setPrice(700);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -658,7 +921,11 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00d);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
@@ -666,24 +933,21 @@ public class TestCreateProduct {
 
 		//
 
-		int invalidCategoryId = 1;
-
 		productDto.setPriceList(priceList);
-		int CategoryId = 1;
 
-		productDto.setPriceList(priceList);
 		Category category = new Category();
-		category.setId(CategoryId);
+		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
@@ -697,24 +961,27 @@ public class TestCreateProduct {
 	}
 
 	@Test
-	public void createProductSizeDoesNotExist() {
-
-		// create the dto instance
+	public void updateProductSizeDoesNotExist() {
 
 		ProductDTO productDto = new ProductDTO();
 
+		int productId = 3;
+
 		List<Price> priceList = productDto.getPriceList();
 
+		int SizeInput = 100;
 		//
 		Price price1 = new Price();
 
-		int invalidSizeInput = 19;
-
 		Size size1 = new Size();
-		size1.setId(invalidSizeInput);
+		size1.setId(SizeInput);
 
 		price1.setSize(size1);
-		price1.setPrice(600.00);
+		price1.setPrice(700.00d);
+
+		Product product1 = new Product();
+		product1.setId(productId);
+		price1.setProduct(product1);
 		//
 
 		//
@@ -724,7 +991,11 @@ public class TestCreateProduct {
 		size2.setId(2);
 
 		price2.setSize(size2);
-		price2.setPrice(290.00);
+		price2.setPrice(590.00d);
+
+		Product product2 = new Product();
+		product2.setId(productId);
+		price2.setProduct(product2);
 		//
 
 		priceList.add(price1);
@@ -732,25 +1003,24 @@ public class TestCreateProduct {
 
 		//
 
-		int CategoryId = 1;
-
 		productDto.setPriceList(priceList);
+
 		Category category = new Category();
-		category.setId(CategoryId);
+		category.setId(1);
 
 		productDto.setCategory(category);
-		productDto.setName("v-neck neck T-shirt");
-		productDto.setDescription("v-neck typography printed navy blue color T-shirt");
-
+		productDto.setName("Black t-shirt");
+		productDto.setDescription("rounded-neck typography printed navy black color T-shirt ");
+		productDto.setId(productId);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.createProductWithPrices(productDto);
+			productService.updateProductDetailsAndPrices(productDto);
 
 		});
 
-		String ExpectedMessage = "Validation error: Size with ID " + invalidSizeInput + " does not exist";
+		String ExpectedMessage = "Validation error: Size with ID " + SizeInput + " does not exist";
 		String actualMessage = exception.getMessage();
 
 		System.out.println(actualMessage);

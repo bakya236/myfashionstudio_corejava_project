@@ -49,12 +49,12 @@ public class ProductDAO {
 				throw new PersistenceException("Creating product failed, no ID obtained.");
 			}
 
-			System.out.println("Product details created successfully");
+			System.out.println("Created product details ");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e.getMessage());
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -209,7 +209,7 @@ public class ProductDAO {
 	 * @param updatedProduct
 	 * @throws PersistenceException
 	 */
-	public void updateProductDetails(int id, ProductDTO updatedProduct) throws PersistenceException {
+	public void updateProductDetails(ProductDTO updatedProduct) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -223,7 +223,7 @@ public class ProductDAO {
 
 			ps.setString(1, updatedProduct.getName());
 			ps.setString(2, updatedProduct.getDescription());
-			ps.setInt(3, id);
+			ps.setInt(3, updatedProduct.getId());
 
 			ps.executeUpdate();
 
@@ -232,7 +232,7 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e.getMessage());
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}

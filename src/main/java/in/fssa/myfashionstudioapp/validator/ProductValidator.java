@@ -1,6 +1,7 @@
 package in.fssa.myfashionstudioapp.validator;
 
 import in.fssa.myfashionstudioapp.dao.ProductDAO;
+import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Product;
 
 public class ProductValidator {
@@ -8,17 +9,17 @@ public class ProductValidator {
 	/**
 	 * 
 	 * @param productId
-	 * @throws RuntimeException
+	 * @throws ValidationException
 	 */
-	public static void rejectIfInvalidproduct(int productId) throws RuntimeException {
+	public static void rejectIfInvalidproduct(int productId) throws ValidationException {
 
 		if (productId < 0) {
-			throw new RuntimeException("Invalid product id input");
+			throw new ValidationException("Invalid product input");
 		}
 
 	}
 
-	public static boolean checkIfProductExits(int productId) {
+	private static boolean checkIfProductExits(int productId) {
 		ProductDAO productDao = new ProductDAO();
 		return productDao.productAldreadyExists(productId);
 	}
@@ -26,11 +27,12 @@ public class ProductValidator {
 	/**
 	 * 
 	 * @param productId
+	 * @throws ValidationException
 	 */
-	public static void rejectIfProductNotExists(int productId) {
+	public static void rejectIfProductNotExists(int productId) throws ValidationException {
 
 		if (!(checkIfProductExits(productId))) {
-			throw new RuntimeException("Product Id with ID " + productId + " does not exist");
+			throw new ValidationException("Product Id with ID " + productId + " does not exist");
 		}
 	}
 
@@ -39,16 +41,16 @@ public class ProductValidator {
 	 * @param newProduct
 	 * @throws RuntimeException
 	 */
-	public static void validateAll(Product newProduct) throws RuntimeException {
+	public static void validateAll(Product newProduct) throws ValidationException {
 
 		if (newProduct == null) {
-			throw new RuntimeException("Product cannot be Null");
+			throw new ValidationException("Product cannot be Null");
 		}
 		if (newProduct.getName() == null || "".equals(newProduct.getName())) {
-			throw new RuntimeException("Product name cannot be null or empty");
+			throw new ValidationException("Product name cannot be null or empty");
 		}
 		if (newProduct.getDescription() == null || "".equals(newProduct.getDescription())) {
-			throw new RuntimeException("Product description cannot be null or empty");
+			throw new ValidationException("Product description cannot be null or empty");
 		}
 
 	}

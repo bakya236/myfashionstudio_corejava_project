@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class PriceDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -78,8 +79,8 @@ public class PriceDAO {
 				price.getProduct().setId(rs.getInt("products_id"));
 				price.getSize().setId(rs.getInt("sizes_id"));
 				price.setPrice(rs.getDouble("price"));
-				price.setStartDate(rs.getDate("started_at"));
-				price.setEndDate(rs.getDate("ended_at"));
+				price.setStartedAt(rs.getTimestamp("started_at"));
+				price.setEndedAt(rs.getTimestamp("ended_at"));
 
 				System.out.println("Retrieved price details");
 			} else {
@@ -129,8 +130,8 @@ public class PriceDAO {
 				price.getProduct().setId(rs.getInt("products_id"));
 				price.getSize().setId(rs.getInt("sizes_id"));
 				price.setPrice(rs.getDouble("price"));
-				price.setStartDate(rs.getDate("started_at"));
-				price.setEndDate(rs.getDate("ended_at"));
+				price.setStartedAt(rs.getTimestamp("started_at"));
+				price.setEndedAt(rs.getTimestamp("ended_at"));
 
 				priceList.add(price);
 
@@ -151,23 +152,23 @@ public class PriceDAO {
 	/**
 	 * 
 	 * @param priceId
+	 * @param dateTime
 	 * @throws PersistenceException
 	 */
-	public void updateprice(int priceId) throws PersistenceException {
-
-		System.out.println("in updateprice dao");
+	public void updateprice(int priceId, Timestamp dateTime) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			String Query = "update prices set ended_at = now() where id = ?";
+			String Query = "update prices set ended_at = ? where id = ?";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(Query);
 
-			ps.setInt(1, priceId);
+			ps.setTimestamp(1, dateTime);
+			ps.setInt(2, priceId);
 
 			ps.executeUpdate();
 
@@ -176,7 +177,7 @@ public class PriceDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps);
 		}
@@ -228,7 +229,7 @@ public class PriceDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
