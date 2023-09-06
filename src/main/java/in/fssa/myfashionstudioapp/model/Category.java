@@ -6,6 +6,14 @@ public class Category {
 	private String name;
 	private Gender gender = new Gender();
 
+	public Category() {
+
+	}
+
+	public Category(int id) {
+		this.id = id;
+	}
+
 	public int getId() {
 		return id;
 	}

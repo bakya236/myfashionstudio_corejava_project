@@ -2,17 +2,28 @@ package in.fssa.myfashionstudioapp.model;
 
 public class User {
 
-	int user_name;
-	String email;
-	String password;
-	boolean is_active;
+	private int id;
+	private String userName;
+	private String email;
+	private String password;
+	private long phoneNumber;
 
-	public int getUser_name() {
-		return user_name;
+	private boolean status;
+
+	public int getId() {
+		return id;
 	}
 
-	public void setUser_name(int user_name) {
-		this.user_name = user_name;
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getEmail() {
@@ -31,12 +42,26 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isIs_active() {
-		return is_active;
+	public long getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setIs_active(boolean is_active) {
-		this.is_active = is_active;
+	public void setPhoneNumber(long phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userName=" + userName + ", email=" + email + ", password=" + password
+				+ ", phoneNumber=" + phoneNumber + ", status=" + status + "]";
 	}
 
 }

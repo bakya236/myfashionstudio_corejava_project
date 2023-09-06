@@ -1,4 +1,4 @@
-package in.fssa.myfashionstudioapp.Product;
+package in.fssa.myfashionstudioapp.product;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -6,15 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.myfashionstudioapp.service.ProductService;
 
-public class TestGetAllProductswithFirstSizeAndPrice {
+public class TestFindProductDetailsByProductId {
 
 	@Test
-	public void getAllProductswithFirstSizeAndPrice() {
-
+	public void findProductDetailsByProductId() {
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			productService.findAllProducts();
+			productService.findProductDetailsByProductId(5);
 		});
 	}
 

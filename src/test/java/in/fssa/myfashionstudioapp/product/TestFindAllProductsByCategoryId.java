@@ -1,20 +1,24 @@
-package in.fssa.myfashionstudioapp.Product;
+package in.fssa.myfashionstudioapp.product;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
+import in.fssa.myfashionstudioapp.dto.ProductDTO;
 import in.fssa.myfashionstudioapp.service.ProductService;
 
 public class TestFindAllProductsByCategoryId {
 
 	@Test
-	public void findAllProductsByCategoryId() {
+	public void getAllProductsByCategoryId() {
 
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			productService.findAllProductsByCategoryId(1);
+			List<ProductDTO> ProductList = productService.findAllProductsByCategoryId(1);
+			ProductList.forEach(System.out::println);
 		});
 	}
 

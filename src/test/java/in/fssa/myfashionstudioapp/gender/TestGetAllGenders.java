@@ -17,7 +17,7 @@ public class TestGetAllGenders {
 		GenderService genderService = new GenderService();
 
 		assertDoesNotThrow(() -> {
-			List<Gender> genderList = genderService.findAll();
+			List<Gender> genderList = genderService.getAllGenders();
 			genderList.forEach(System.out::println);
 		});
 

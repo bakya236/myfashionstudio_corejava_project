@@ -16,7 +16,6 @@ public class TestFindCategoryByCategoryId {
 			Category category = categoryService.findCategoryByCategoryId(1);
 			System.out.println(category);
 		});
-
 	}
 
 }

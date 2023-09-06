@@ -21,6 +21,14 @@ public class Gender {
 		this.id = id;
 	}
 
+	public Gender() {
+
+	}
+
+	public Gender(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return "Gender [id=" + id + ", name=" + name + "]";

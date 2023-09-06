@@ -26,7 +26,7 @@ public class GenderDAO {
 		List<Gender> genderList = new ArrayList<Gender>();
 
 		try {
-			String query = "select * from genders";
+			String query = "SELECT id , gender_name FROM genders";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -64,7 +64,7 @@ public class GenderDAO {
 		Gender gender = null;
 
 		try {
-			String query = "select * from genders where id = ?";
+			String query = "SELECT id , gender_name FROM genders WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 			ps.setInt(1, id);
@@ -72,6 +72,7 @@ public class GenderDAO {
 
 			if (rs.next()) {
 				gender = new Gender();
+
 				gender.setId(id);
 				gender.setName(rs.getString("gender_name"));
 			}
@@ -99,7 +100,7 @@ public class GenderDAO {
 		boolean flag = false;
 
 		try {
-			String query = "Select * from genders where id = ?";
+			String query = "Select id , gender_name FROM genders WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -116,7 +117,7 @@ public class GenderDAO {
 			System.out.print(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 		} finally {
-			ConnectionUtil.close(con, ps);
+			ConnectionUtil.close(con, ps, rs);
 		}
 
 		return flag;

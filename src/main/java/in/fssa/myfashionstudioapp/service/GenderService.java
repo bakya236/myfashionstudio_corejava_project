@@ -15,17 +15,19 @@ public class GenderService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<Gender> findAll() throws ServiceException {
+	public List<Gender> getAllGenders() throws ServiceException {
 
+		List<Gender> genderList;
 		try {
-			GenderDAO genderDao = new GenderDAO();
-			return genderDao.findAll();
+			GenderDAO genderDAO = new GenderDAO();
+			genderList = genderDAO.findAll();
 		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
 
+		return genderList;
 	}
 
 	/**
@@ -40,13 +42,9 @@ public class GenderService {
 
 		try {
 			GenderValidator.rejectIfInvalidGender(id);
-			GenderDAO genderDao = new GenderDAO();
+			GenderDAO genderDAO = new GenderDAO();
 
-			return genderDao.findById(id);
-		} catch (RuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ValidationException(e.getMessage());
+			return genderDAO.findById(id);
 		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

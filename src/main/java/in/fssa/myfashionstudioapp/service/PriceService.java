@@ -1,15 +1,15 @@
 package in.fssa.myfashionstudioapp.service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import com.google.protobuf.ServiceException;
 
 import in.fssa.myfashionstudioapp.dao.PriceDAO;
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
-import in.fssa.myfashionstudioapp.exception.ValidationException;
+import in.fssa.myfashionstudioapp.exception.ServiceException;
+
 // cannot import the service exception
-//import in.fssa.myfashionstudioapp.exception.ServiceException;
+
+import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.validator.PriceValidator;
 
@@ -19,22 +19,21 @@ public class PriceService {
 	 * 
 	 * @param price
 	 * @throws ValidationException
-	 * @throws in.fssa.myfashionstudioapp.exception.ServiceException
+	 * @throws ServiceException
 	 */
-	public void createPrice(Price price)
-			throws ValidationException, in.fssa.myfashionstudioapp.exception.ServiceException {
+	public void createPrice(Price price) throws ValidationException, ServiceException {
 
 		try {
-			PriceValidator.Validate(price);
+			PriceValidator.validate(price);
 
-			PriceDAO priceDao = new PriceDAO();
-			priceDao.createPrice(price);
+			PriceDAO priceDAO = new PriceDAO();
+			priceDAO.create(price);
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			throw new ValidationException(e.getMessage());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
-			throw new in.fssa.myfashionstudioapp.exception.ServiceException(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -50,8 +49,8 @@ public class PriceService {
 	public Price FindFirstPriceByProductId(int id) throws ServiceException {
 		Price price = null;
 		try {
-			PriceDAO priceDao = new PriceDAO();
-			price = priceDao.FindFirstPriceByProductId(id);
+			PriceDAO priceDAO = new PriceDAO();
+			price = priceDAO.FindFirstPriceByProductId(id);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
@@ -70,8 +69,8 @@ public class PriceService {
 	public List<Price> FindAllPricesByProductId(int id) throws ServiceException {
 
 		try {
-			PriceDAO priceDao = new PriceDAO();
-			return priceDao.FindAllPricesByProductId(id);
+			PriceDAO priceDAO = new PriceDAO();
+			return priceDAO.FindAllPricesByProductId(id);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
@@ -85,7 +84,7 @@ public class PriceService {
 	 * @throws ServiceException
 	 */
 
-	public void updateprice(int priceId, Timestamp dateTime) throws ServiceException {
+	private void updateprice(int priceId, LocalDateTime dateTime) throws ServiceException {
 
 		// ask - need for form validation
 		// ask - is there any need to again check whether the product and size exists in
@@ -95,9 +94,9 @@ public class PriceService {
 
 			// again checking form validation
 
-			PriceDAO priceDao = new PriceDAO();
+			PriceDAO priceDAO = new PriceDAO();
 
-			priceDao.updateprice(priceId, dateTime);
+			priceDAO.update(priceId, dateTime);
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -113,8 +112,7 @@ public class PriceService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public Price findPriceBypProductIdAndSizeId(int productId, int sizeId)
-			throws in.fssa.myfashionstudioapp.exception.ServiceException {
+	public Price findPriceByProductIdAndSizeId(int productId, int sizeId) throws ServiceException {
 		Price price = null;
 
 		try {
@@ -127,16 +125,23 @@ public class PriceService {
 //
 //			SizeValidator.rejectIfSizeNotExists(sizeId);
 
-			PriceDAO priceDao = new PriceDAO();
-			price = priceDao.findPriceBypProductIdAndSizeId(productId, sizeId);
+			PriceDAO priceDAO = new PriceDAO();
+			price = priceDAO.findPriceByProductIdAndSizeId(productId, sizeId);
 			System.out.println("found the price with the given product id and size id");
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
-			throw new in.fssa.myfashionstudioapp.exception.ServiceException("Error update price :" + e.getMessage());
+			throw new ServiceException("Error finding product details :" + e.getMessage());
 		}
 
 		return price;
+	}
+
+	public void changePrice(int priceId, Price price, LocalDateTime dateTime)
+			throws ServiceException, ValidationException {
+		PriceService priceService = new PriceService();
+		priceService.updateprice(priceId, dateTime); // update enddate = current date;
+		priceService.createPrice(price);
 	}
 
 }

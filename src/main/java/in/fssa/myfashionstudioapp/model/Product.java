@@ -5,6 +5,15 @@ public class Product {
 	protected String name;
 	protected String description;
 	protected Category category = new Category();
+	protected boolean status;
+
+	public Product() {
+
+	}
+
+	public Product(int id) {
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;

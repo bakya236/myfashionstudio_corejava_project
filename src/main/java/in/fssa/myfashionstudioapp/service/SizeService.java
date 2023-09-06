@@ -16,11 +16,11 @@ public class SizeService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<Size> FindAllSizes() throws ServiceException {
+	public List<Size> getAllSizes() throws ServiceException {
 
 		try {
-			SizeDAO sizeDao = new SizeDAO();
-			return sizeDao.findAllSize();
+			SizeDAO sizeDAO = new SizeDAO();
+			return sizeDAO.findAll();
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
@@ -32,19 +32,15 @@ public class SizeService {
 	 * 
 	 * @param id
 	 * @return
-	 * @throws ServiceException
 	 * @throws ValidationException
 	 */
-	public Size FindSizeBySizeId(int id) throws ValidationException, ServiceException {
+	public Size FindSizeBySizeId(int SizeId) throws ValidationException, ServiceException {
 
 		try {
-			SizeValidator.rejectIfInvalidSize(id);
+			SizeValidator.rejectIfInvalidSize(SizeId);
 
-			SizeDAO sizeDao = new SizeDAO();
-			return sizeDao.FindSizeBySizeId(id);
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new ValidationException(e.getMessage());
+			SizeDAO sizeDAO = new SizeDAO();
+			return sizeDAO.FindById(SizeId);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());

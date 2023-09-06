@@ -16,10 +16,9 @@ public class TestGetAllCategoriesByGenderId {
 		CategoryService categoryService = new CategoryService();
 
 		assertDoesNotThrow(() -> {
-			List<Category> categoryList = categoryService.findAllCatgegoryByGenderId(1);
+			List<Category> categoryList = categoryService.findAllCategoriesByGenderId(1);
 			categoryList.forEach(System.out::println);
 		});
-
 	}
 
 }

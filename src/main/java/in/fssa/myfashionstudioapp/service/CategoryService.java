@@ -1,5 +1,6 @@
 package in.fssa.myfashionstudioapp.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import in.fssa.myfashionstudioapp.dao.CategoryDAO;
@@ -19,22 +20,23 @@ public class CategoryService {
 	 * @throws ServiceException
 	 */
 
-	public List<Category> findAllCatgegoryByGenderId(int id) throws ValidationException, ServiceException {
+	public List<Category> findAllCategoriesByGenderId(int genderId) throws ValidationException, ServiceException {
 
+		// return null
+		List<Category> categoryList = new ArrayList<>();
 		try {
-			CategoryValidator.rejectIfCategoryNotExists(id);
+			CategoryValidator.rejectIfCategoryNotExists(genderId);
 
-			CategoryDAO categoryDao = new CategoryDAO();
+			CategoryDAO categoryDAO = new CategoryDAO();
 
-			List<Category> categorylist = categoryDao.findAllCatgegoryByGenderId(id);
+			categoryList = categoryDAO.findAllByGenderId(genderId);
 
-			return categorylist;
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
 
+		return categoryList;
 	}
 
 	/**
@@ -45,14 +47,15 @@ public class CategoryService {
 	 * @throws ServiceException
 	 */
 
-	public Category findCategoryByCategoryId(int id) throws ValidationException, ServiceException {
+	public Category findCategoryByCategoryId(int categoryId) throws ValidationException, ServiceException {
 
+		Category category = null;
 		try {
-			CategoryValidator.rejectIfCategoryNotExists(id);
+			CategoryValidator.rejectIfCategoryNotExists(categoryId);
 
-			CategoryDAO categoryDao = new CategoryDAO();
+			CategoryDAO categoryDAO = new CategoryDAO();
 
-			return categoryDao.findCategoryByCategoryId(id);
+			category = categoryDAO.findByCategoryId(categoryId);
 
 		} catch (PersistenceException e) {
 
@@ -61,32 +64,7 @@ public class CategoryService {
 			throw new ServiceException(e.getMessage());
 		}
 
-	}
-
-	// business validation
-
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws ServiceException
-	 */
-	public boolean categoryAlreadyExists(int id) throws ServiceException {
-
-		boolean categoryAlreadyExists;
-
-		try {
-			CategoryDAO categoryDao = new CategoryDAO();
-
-			categoryAlreadyExists = categoryDao.categoryAlreadyExists(id);
-
-		} catch (PersistenceException e) {
-
-			e.printStackTrace();
-
-			throw new ServiceException(e.getMessage());
-		}
-		return categoryAlreadyExists;
+		return category;
 
 	}
 

@@ -19,7 +19,7 @@ public class SizeDAO {
 	 * @throws PersistenceException
 	 */
 
-	public List<Size> findAllSize() throws PersistenceException {
+	public List<Size> findAll() throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -28,7 +28,7 @@ public class SizeDAO {
 
 		try {
 			con = ConnectionUtil.getConnection();
-			String query = "Select * From sizes";
+			String query = "SELECT id , value From sizes";
 
 			ps = con.prepareStatement(query);
 
@@ -61,7 +61,7 @@ public class SizeDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public Size FindSizeBySizeId(int id) throws PersistenceException {
+	public Size FindById(int sizeId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -69,13 +69,13 @@ public class SizeDAO {
 		Size size = null;
 
 		try {
-			String Query = "Select * from sizes where id = ?";
+			String Query = "SELECT id , value FROM sizes WHERE id = ?";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(Query);
 
-			ps.setInt(1, id);
+			ps.setInt(1, sizeId);
 
 			rs = ps.executeQuery();
 
@@ -94,7 +94,6 @@ public class SizeDAO {
 			ConnectionUtil.close(con, ps, rs);
 		}
 
-		System.out.println(size);
 		return size;
 	}
 
@@ -105,7 +104,7 @@ public class SizeDAO {
 	 * @param id
 	 * @return
 	 */
-	public boolean SizeAldreadyExists(int id) throws PersistenceException {
+	public boolean sizeAlreadyExists(int sizeId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -113,11 +112,11 @@ public class SizeDAO {
 		boolean flag = false;
 
 		try {
-			String query = "Select * from sizes where id = ?";
+			String query = "SELECT 1 FROM sizes WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
-			ps.setInt(1, id);
+			ps.setInt(1, sizeId);
 
 			rs = ps.executeQuery();
 
@@ -130,7 +129,7 @@ public class SizeDAO {
 			System.out.print(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 		} finally {
-			ConnectionUtil.close(con, ps);
+			ConnectionUtil.close(con, ps, rs);
 		}
 
 		return flag;

@@ -20,7 +20,7 @@ public class CategoryDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public List<Category> findAllCatgegoryByGenderId(int id) throws PersistenceException {
+	public List<Category> findAllByGenderId(int genderId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -29,10 +29,10 @@ public class CategoryDAO {
 
 		try {
 			con = ConnectionUtil.getConnection();
-			String query = "Select * From categories where genders_id = ?";
+			String query = "SELECT id ,category_name ,gender_id FROM categories WHERE gender_id = ?";
 
 			ps = con.prepareStatement(query);
-			ps.setInt(1, id);
+			ps.setInt(1, genderId);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -43,7 +43,7 @@ public class CategoryDAO {
 				category.setName(rs.getString("category_name"));
 
 				Gender gender = new Gender();
-				gender.setId(id);
+				gender.setId(genderId);
 
 				category.setGender(gender);
 
@@ -69,7 +69,7 @@ public class CategoryDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public Category findCategoryByCategoryId(int id) throws PersistenceException {
+	public Category findByCategoryId(int categoryId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -78,10 +78,10 @@ public class CategoryDAO {
 
 		try {
 			con = ConnectionUtil.getConnection();
-			String query = "Select * From categories where id = ?";
+			String query = "SELECT id ,category_name ,gender_id FROM categories WHERE id = ?";
 			ps = con.prepareStatement(query);
 
-			ps.setInt(1, id);
+			ps.setInt(1, categoryId);
 
 			rs = ps.executeQuery();
 
@@ -89,9 +89,9 @@ public class CategoryDAO {
 
 				category = new Category();
 
-				category.setId(id);
+				category.setId(categoryId);
 				category.setName(rs.getString("category_name"));
-				category.getGender().setId(rs.getInt("genders_id"));
+				category.getGender().setId(rs.getInt("gender_id"));
 
 			}
 
@@ -125,7 +125,7 @@ public class CategoryDAO {
 		boolean flag = false;
 
 		try {
-			String query = "Select * from categories where id = ?";
+			String query = "SELECT 1 FROM categories WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
@@ -142,7 +142,7 @@ public class CategoryDAO {
 			System.out.print(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 		} finally {
-			ConnectionUtil.close(con, ps);
+			ConnectionUtil.close(con, ps, rs);
 		}
 
 		return flag;

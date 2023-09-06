@@ -20,15 +20,17 @@ public class SizeValidator {
 
 //	business validation
 
-	public static boolean checkIfSizeExists(int sizeId) throws ValidationException {
+	private static boolean checkIfSizeExists(int sizeId) throws ValidationException {
+		boolean flag;
 		try {
-			SizeDAO sizeDao = new SizeDAO();
-			return sizeDao.SizeAldreadyExists(sizeId);
+			SizeDAO sizeDAO = new SizeDAO();
+			flag = sizeDAO.sizeAlreadyExists(sizeId);
 		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new ValidationException(e.getMessage());
 		}
+		return flag;
 	}
 
 	/**

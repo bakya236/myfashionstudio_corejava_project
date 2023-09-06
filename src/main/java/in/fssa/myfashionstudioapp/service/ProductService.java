@@ -20,44 +20,28 @@ import in.fssa.myfashionstudioapp.validator.PriceValidator;
 import in.fssa.myfashionstudioapp.validator.ProductValidator;
 
 public class ProductService {
+
 	/**
 	 * 
 	 * @param newProduct
 	 * @throws ValidationException
 	 * @throws ServiceException
-	 * @throws com.google.protobuf.ServiceException
-	 * @throws com.google.protobuf.ServiceException
 	 */
-	public void createProductWithPrices(ProductDTO newProduct) throws ValidationException, ServiceException {
+	public void createProduct(ProductDTO newProduct) throws ValidationException, ServiceException {
 
 		try {
 
 			// validation
 			ProductValidator.validateAll(newProduct);
 
-			int categoryId = newProduct.getCategory().getId();
-
-			CategoryValidator.rejectIfInvalidCategory(categoryId);
-			CategoryValidator.rejectIfCategoryNotExists(categoryId);
-
-			// find the category
-
-			CategoryService categoryService = new CategoryService();
-			Category category = categoryService.findCategoryByCategoryId(categoryId);
-
-			int genderId = category.getGender().getId();
-
-			GenderValidator.rejectIfInvalidGender(genderId);
-			GenderValidator.rejectIfGenderNotExists(genderId);
-
 			List<Price> priceList = newProduct.getPriceList();
-			PriceValidator.ValidateAll(priceList);
+			PriceValidator.validateAll(priceList);
 
-			ProductDAO productDao = new ProductDAO();
+			ProductDAO productDAO = new ProductDAO();
 
 			// create the product, get the generated product id
 
-			int productId = productDao.create(newProduct);
+			int productId = productDAO.create(newProduct);
 
 			PriceService priceService = new PriceService();
 
@@ -72,10 +56,6 @@ public class ProductService {
 			}
 
 			System.out.println("product and its prices created successfully");
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			// Handle validation errors (e.g., provide user-friendly error messages)
-			throw new ValidationException("Validation error: " + e.getMessage());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error creating product and prices: " + e.getMessage());
@@ -84,7 +64,6 @@ public class ProductService {
 	}
 
 	// need to check
-
 	// findAllProductsWithFirstPriceAndSize
 
 	/**
@@ -93,34 +72,38 @@ public class ProductService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public List<ProductDTO> findAllProducts() throws ValidationException, ServiceException {
 
-		List<ProductDTO> productDtoList = new ArrayList<>();
+	public List<ProductDTO> getAllProducts() throws ValidationException, ServiceException {
+
+		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
 
-			ProductDAO productDao = new ProductDAO();
+			ProductDAO productDAO = new ProductDAO();
 
-			List<ProductDTO> ProductList = productDao.findAllProducts(); // [{id,name,description,category},{},{}]
+			List<ProductDTO> ProductList = productDAO.findAll(); // [{id,name,description,category},{},{}]
 
 			for (Product product : ProductList) {
 
 				// product ==> {id,name,description,category}
 
-				ProductDTO productDto = new ProductDTO();
+				ProductDTO productDTO = new ProductDTO();
 
 				// set category name
 				CategoryService categoryService = new CategoryService();
 				Category category = categoryService.findCategoryByCategoryId(product.getCategory().getId());
-
 				// set gender name
 				GenderService genderService = new GenderService();
+
 				Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
-				category.setGender(gender);
 
 				// set the gender name
+				gender.setId(gender.getId());
+				gender.setName(gender.getName());
 
-				List<Price> priceList = productDto.getPriceList();
+				category.setGender(gender);
+
+				List<Price> priceList = productDTO.getPriceList();
 
 				PriceService priceService = new PriceService();
 				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId()); // {price,products_id,sizes_id,started_at,ended_at}
@@ -132,33 +115,27 @@ public class ProductService {
 
 				priceList.add(eachPrice);
 
-				productDto.setId(product.getId());
-				productDto.setName(product.getName());
-				productDto.setDescription(product.getDescription());
-				productDto.setCategory(category);
-				productDto.setPriceList(priceList);
+				productDTO.setId(product.getId());
+				productDTO.setName(product.getName());
+				productDTO.setDescription(product.getDescription());
+				productDTO.setCategory(category);
+				productDTO.setPriceList(priceList);
 
-				productDtoList.add(productDto);
+				productDTOList.add(productDTO);
 
-			}
-
-			// to sysout the products
-			for (ProductDTO productPrice : productDtoList) {
-
-				System.out.println(productPrice);
 			}
 
 			System.out.println("All products are sucessfully retrieved");
 
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ServiceException("Error find all products : " + e.getMessage());
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			// Handle validation errors (e.g., provide user-friendly error messages)
 			throw new ValidationException("Validation error: " + e.getMessage());
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error finding all products : " + e.getMessage());
 		}
 
-		return productDtoList;
+		return productDTOList;
 
 	}
 
@@ -171,33 +148,35 @@ public class ProductService {
 	 */
 	public ProductDTO findProductDetailsByProductId(int id) throws ValidationException, ServiceException {
 
-		ProductDTO productDto = null;
+		ProductDTO productDTO = null;
 
 		try {
 
-			ProductValidator.rejectIfInvalidproduct(id);
+			ProductValidator.rejectIfInvalidProduct(id);
 			ProductValidator.rejectIfProductNotExists(id);
 
 			ProductDAO productDAO = new ProductDAO();
 
-			productDto = productDAO.findProductDetailsByProductId(id); // {name,description,category,pricelist[]}
+			productDTO = productDAO.findByProducId(id); // {name,description,category,pricelist[]}
 
 			// set category name
 			CategoryService categoryService = new CategoryService();
-			Category category = categoryService.findCategoryByCategoryId(productDto.getCategory().getId());
+			Category category = categoryService.findCategoryByCategoryId(productDTO.getCategory().getId());
+
+			category.setId(category.getId());
+			category.setName(category.getName());
 
 			// set gender name
 			GenderService genderService = new GenderService();
 			Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
-
 			category.setGender(gender);
 
-			productDto.setCategory(category);
+			productDTO.setCategory(category);
 
 			PriceService PriceService = new PriceService();
-			productDto.setPriceList(PriceService.FindAllPricesByProductId(id)); // pricelist[{id,size_id,price},{},{}]
+			productDTO.setPriceList(PriceService.FindAllPricesByProductId(id)); // pricelist[{id,size_id,price},{},{}]
 
-			List<Price> priceList = productDto.getPriceList();
+			List<Price> priceList = productDTO.getPriceList();
 
 			for (Price price : priceList) {
 				SizeService sizeService = new SizeService();
@@ -208,18 +187,14 @@ public class ProductService {
 			}
 
 			// to sysout the product details
-			System.out.println(productDto);
+			System.out.println(productDTO);
 
 			System.out.println("sucessfully retrieved the product details");
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error find product details : " + e.getMessage());
-		} catch (Exception e) {
-			// Handle validation errors (e.g., provide user-friendly error messages)
-			throw new ValidationException("Validation error: " + e.getMessage());
 		}
-
-		return productDto;
+		return productDTO;
 
 	}
 
@@ -233,7 +208,7 @@ public class ProductService {
 
 	public List<ProductDTO> findAllProductsByCategoryId(int id) throws ValidationException, ServiceException {
 
-		List<ProductDTO> productDtoList = new ArrayList<>();
+		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
 
@@ -242,35 +217,29 @@ public class ProductService {
 			// business validation
 			CategoryValidator.rejectIfCategoryNotExists(id);
 
-			ProductDAO productDao = new ProductDAO();
+			ProductDAO productDAO = new ProductDAO();
 
-			List<ProductDTO> ProductList = productDao.findAllProducts(); // [{id,name,description,category,pricelist},{},{}]
+			List<ProductDTO> ProductList = productDAO.findAllByCategoryId(id); // [{id,name,description,category,pricelist},{},{}]
 
 			for (Product product : ProductList) {
 
-				ProductDTO productDto = new ProductDTO();
+				ProductDTO productDTO = new ProductDTO();
 
-				List<Price> priceList = productDto.getPriceList(); // []
+				List<Price> priceList = productDTO.getPriceList(); // []
 
 				PriceService priceService = new PriceService();
 				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId());
 
 				priceList.add(eachPrice);
 
-				productDto.setId(product.getId());
-				productDto.setName(product.getName());
-				productDto.setDescription(product.getDescription());
-				productDto.setCategory(product.getCategory());
-				productDto.setPriceList(priceList);
+				productDTO.setId(product.getId());
+				productDTO.setName(product.getName());
+				productDTO.setDescription(product.getDescription());
+				productDTO.setCategory(product.getCategory());
+				productDTO.setPriceList(priceList);
 
-				productDtoList.add(productDto);
+				productDTOList.add(productDTO);
 
-			}
-
-			// to sysout the products
-			for (ProductDTO productPrice : productDtoList) {
-
-				System.out.println(productPrice);
 			}
 
 			System.out.println("All products are sucessfully retrieved");
@@ -278,12 +247,9 @@ public class ProductService {
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error find all products : " + e.getMessage());
-		} catch (Exception e) {
-			// Handle validation errors (e.g., provide user-friendly error messages)
-			throw new ValidationException("Validation error: " + e.getMessage());
 		}
 
-		return productDtoList;
+		return productDTOList;
 
 	}
 
@@ -295,9 +261,9 @@ public class ProductService {
 	 * @throws ServiceException
 	 * @throws com.google.protobuf.ServiceException
 	 */
-	public void updateProductDetailsAndPrices(ProductDTO updatedProduct) // updatedproduct
-																			// {name,description,pricelist}
-			throws ValidationException, ServiceException, com.google.protobuf.ServiceException {
+	public void updateProduct(ProductDTO updatedProduct) // updatedproduct
+															// {name,description,pricelist}
+			throws ValidationException, ServiceException {
 
 		try {
 
@@ -306,7 +272,7 @@ public class ProductService {
 			int productId = updatedProduct.getId();
 
 			// validation
-			ProductValidator.rejectIfInvalidproduct(productId);
+			ProductValidator.rejectIfInvalidProduct(productId);
 
 //			business validation - reject If Product Not Exists
 			ProductValidator.rejectIfProductNotExists(productId);
@@ -329,11 +295,11 @@ public class ProductService {
 			// validating the price in price service - update price()
 			List<Price> priceList = updatedProduct.getPriceList();
 
-			PriceValidator.ValidateAll(priceList);
+			PriceValidator.validateAll(priceList);
 
-			ProductDAO productDao = new ProductDAO();
+			ProductDAO productDAO = new ProductDAO();
 
-			productDao.updateProductDetails(updatedProduct);
+			productDAO.updateProductDetails(updatedProduct);
 
 			PriceService priceService = new PriceService();
 
@@ -341,28 +307,47 @@ public class ProductService {
 
 				int sizeId = price.getSize().getId();
 
-				Price pricefromProdIdAndSizeId = priceService.findPriceBypProductIdAndSizeId(productId, sizeId);
+				Price pricefromProdIdAndSizeId = priceService.findPriceByProductIdAndSizeId(productId, sizeId);
 
-				LocalDateTime date = LocalDateTime.now();
-				java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date);
+				if (pricefromProdIdAndSizeId != null) {
+					if (pricefromProdIdAndSizeId.getPrice() != price.getPrice()) {
 
-				if (pricefromProdIdAndSizeId.getPrice() != price.getPrice()) {
-					int priceId = pricefromProdIdAndSizeId.getId(); // null error
+						System.out.println(pricefromProdIdAndSizeId);
 
-					priceService.updateprice(priceId, dateTime); // update enddate = current date;
+						LocalDateTime date = LocalDateTime.now();
 
+						int priceId = pricefromProdIdAndSizeId.getId(); // null error
+						priceService.changePrice(priceId, price, date);
+					}
+				} else {
 					priceService.createPrice(price);
 				}
 
 			}
 
 			System.out.println("product and its prices updated successfully");
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			throw new ValidationException("Validation error: " + e.getMessage());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error updating product and prices: " + e.getMessage());
+		}
+
+	}
+
+	public void deleteProduct(int id) throws ServiceException, ValidationException {
+
+		// validation
+		ProductValidator.rejectIfInvalidProduct(id);
+
+		ProductValidator.rejectIfProductNotExists(id);
+
+		ProductDAO productDAO = new ProductDAO();
+
+		try {
+			productDAO.delete(id);
+			System.out.println("product has been deactivated successfully");
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error deleting product: " + e.getMessage());
 		}
 
 	}

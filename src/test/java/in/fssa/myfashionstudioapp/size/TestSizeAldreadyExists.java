@@ -1,4 +1,4 @@
-package in.fssa.myfashionstudioapp.Size;
+package in.fssa.myfashionstudioapp.size;
 
 public class TestSizeAldreadyExists {
 

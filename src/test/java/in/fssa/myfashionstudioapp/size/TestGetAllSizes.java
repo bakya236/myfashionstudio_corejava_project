@@ -1,21 +1,25 @@
-package in.fssa.myfashionstudioapp.Size;
+package in.fssa.myfashionstudioapp.size;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.service.SizeService;
 
-public class TestFindSizeBySizeId {
+public class TestGetAllSizes {
 
 	@Test
-	public void FindSizeBySizeId() {
-
+	public void findAllSizes() {
 		SizeService sizeService = new SizeService();
+
 		assertDoesNotThrow(() -> {
-			Size size = sizeService.FindSizeBySizeId(1);
+			List<Size> sizeList = sizeService.getAllSizes();
+			sizeList.forEach(System.out::println);
 		});
+
 	}
 
 }

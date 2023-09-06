@@ -19,8 +19,12 @@ public class PriceValidator {
 			throw new ValidationException("price cannot be null");
 		}
 
-		if (price.getPrice() <= 100.00d || price.getPrice() >= 10000.0d) {
-			throw new ValidationException("Invalid price input , price must be between 100 to 10000");
+		if (price.getPrice() <= 0.0d) {
+			throw new ValidationException("Invalid price input");
+		}
+
+		if (price.getPrice() >= 1000000.0d) {
+			throw new ValidationException("Product price must not exceed 1,000,000 rupees.");
 		}
 	}
 
@@ -31,7 +35,7 @@ public class PriceValidator {
 	 * @param price
 	 * @throws ValidationException
 	 */
-	public static void Validate(Price price) throws ValidationException { // {} => { price, size }
+	public static void validate(Price price) throws ValidationException { // {} => { price, size }
 
 		PriceValidator.rejectIfInvalidPrice(price);
 
@@ -43,7 +47,7 @@ public class PriceValidator {
 	 * @throws ValidationException
 	 */
 
-	public static void ValidateAll(List<Price> priceList) throws ValidationException {
+	public static void validateAll(List<Price> priceList) throws ValidationException {
 
 		for (Price price : priceList) { // [ {}, {}, {} ]
 			PriceValidator.rejectIfInvalidPrice(price); // {} => { price size }

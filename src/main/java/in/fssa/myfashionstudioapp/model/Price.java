@@ -1,6 +1,6 @@
 package in.fssa.myfashionstudioapp.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Price {
 
@@ -8,8 +8,12 @@ public class Price {
 	private Product product = new Product();
 	private Size size = new Size();
 	private double price;
-	private Timestamp startedAt;
-	private Timestamp endedAt;
+	private LocalDateTime startedAt;
+	private LocalDateTime endedAt;
+
+	public Price() {
+
+	};
 
 	public int getId() {
 		return id;
@@ -43,19 +47,19 @@ public class Price {
 		this.price = price;
 	}
 
-	public Timestamp getStartedAt() {
+	public LocalDateTime getStartedAt() {
 		return startedAt;
 	}
 
-	public void setStartedAt(Timestamp startedAt) {
+	public void setStartedAt(LocalDateTime startedAt) {
 		this.startedAt = startedAt;
 	}
 
-	public Timestamp getEndedAt() {
+	public LocalDateTime getEndedAt() {
 		return endedAt;
 	}
 
-	public void setEndedAt(Timestamp endedAt) {
+	public void setEndedAt(LocalDateTime endedAt) {
 		this.endedAt = endedAt;
 	}
 

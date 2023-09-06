@@ -24,12 +24,13 @@ public class ProductDAO {
 
 		Connection con = null;
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 
 		// Get the generated product ID
 		int productId = -1;
 
 		try {
-			String Query = "Insert into products (name, description, categories_id) values(?,?,?)";
+			String Query = "INSERT INTO products (name, description, category_id) VALUES(?,?,?) ";
 
 			con = ConnectionUtil.getConnection();
 
@@ -41,10 +42,10 @@ public class ProductDAO {
 
 			ps.executeUpdate();
 
-			ResultSet generatedKeys = ps.getGeneratedKeys();
+			rs = ps.getGeneratedKeys();
 
-			if (generatedKeys.next()) {
-				productId = generatedKeys.getInt(1);
+			if (rs.next()) {
+				productId = rs.getInt(1);
 			} else {
 				throw new PersistenceException("Creating product failed, no ID obtained.");
 			}
@@ -56,29 +57,27 @@ public class ProductDAO {
 			System.out.print(e.getMessage());
 			throw new PersistenceException(e.getMessage());
 		} finally {
-			ConnectionUtil.close(con, ps);
+			ConnectionUtil.close(con, ps, rs);
 		}
 
 		return productId;
 
 	}
 
-//	find all products 
-
 	/**
 	 * 
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public List<ProductDTO> findAllProducts() throws PersistenceException {
+	public List<ProductDTO> findAll() throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		List<ProductDTO> productDtoList = new ArrayList<>();
+		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
-			String Query = "Select * from products";
+			String Query = "SELECT id , name , description , category_id FROM products WHERE status = 1";
 
 			con = ConnectionUtil.getConnection();
 
@@ -88,25 +87,25 @@ public class ProductDAO {
 
 			while (rs.next()) {
 
-				ProductDTO productDto = new ProductDTO();
-				productDto.setId(rs.getInt("id"));
-				productDto.setName(rs.getString("name"));
-				productDto.setDescription(rs.getString("description"));
-				productDto.getCategory().setId(rs.getInt("categories_id"));
+				ProductDTO productDTO = new ProductDTO();
+				productDTO.setId(rs.getInt("id"));
+				productDTO.setName(rs.getString("name"));
+				productDTO.setDescription(rs.getString("description"));
+				productDTO.getCategory().setId(rs.getInt("category_id"));
 
-				productDtoList.add(productDto);
+				productDTOList.add(productDTO);
 
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
 
-		return productDtoList;
+		return productDTOList;
 
 	}
 
@@ -116,90 +115,92 @@ public class ProductDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public ProductDTO findProductDetailsByProductId(int id) throws PersistenceException {
+	public List<ProductDTO> findAllByCategoryId(int categoryId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ProductDTO productDto = null;
-
-		try {
-			String Query = "Select * from products where id = ?";
-
-			con = ConnectionUtil.getConnection();
-
-			ps = con.prepareStatement(Query);
-			ps.setInt(1, id);
-
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-
-				productDto = new ProductDTO();
-				productDto.setId(rs.getInt("id"));
-				productDto.setName(rs.getString("name"));
-				productDto.setDescription(rs.getString("description"));
-				productDto.getCategory().setId(rs.getInt("categories_id"));
-
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-
-		return productDto;
-
-	}
-
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws PersistenceException
-	 */
-	public List<ProductDTO> findAllProductsByCategoryId(int id) throws PersistenceException {
-
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		List<ProductDTO> productDtoList = new ArrayList<>();
+		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
 
-			String Query = "Select * from products where categories_id = ?";
+			String Query = "SELECT id , name , description , category_id FROM products WHERE category_id = ? AND status = 1";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(Query);
 
+			ps.setInt(1, categoryId);
+
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 
-				ProductDTO productDto = new ProductDTO();
-				productDto.setId(rs.getInt("id"));
-				productDto.setName(rs.getString("name"));
-				productDto.setDescription(rs.getString("description"));
-				productDto.getCategory().setId(rs.getInt("categories_id"));
+				ProductDTO productDTO = new ProductDTO();
+				productDTO.setId(rs.getInt("id"));
+				productDTO.setName(rs.getString("name"));
+				productDTO.setDescription(rs.getString("description"));
+				productDTO.getCategory().setId(rs.getInt("category_id"));
 
 //				how will i set the category name  
 
-				productDtoList.add(productDto);
+				productDTOList.add(productDTO);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
 
-		return productDtoList;
+		return productDTOList;
+
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws PersistenceException
+	 */
+	public ProductDTO findByProducId(int productId) throws PersistenceException {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ProductDTO productDTO = null;
+
+		try {
+			String Query = "SELECT id , name , description , category_id  FROM products WHERE id = ? AND status = 1";
+
+			con = ConnectionUtil.getConnection();
+
+			ps = con.prepareStatement(Query);
+			ps.setInt(1, productId);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				productDTO = new ProductDTO();
+				productDTO.setId(rs.getInt("id"));
+				productDTO.setName(rs.getString("name"));
+				productDTO.setDescription(rs.getString("description"));
+				productDTO.getCategory().setId(rs.getInt("category_id"));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return productDTO;
 
 	}
 
@@ -215,7 +216,7 @@ public class ProductDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String Query = "update products set name = ? , description = ? where id = ?";
+			String Query = "UPDATE products SET name = ? , description = ? WHERE id = ? AND status = 1";
 
 			con = ConnectionUtil.getConnection();
 
@@ -239,14 +240,12 @@ public class ProductDAO {
 
 	}
 
-	// business validation - product aldready exists
-
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public boolean productAldreadyExists(int id) {
+	public boolean productAlreadyExists(int productId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -254,11 +253,11 @@ public class ProductDAO {
 		boolean flag = false;
 
 		try {
-			String query = "Select * from products where id = ?";
+			String query = "SELECT 1 FROM products WHERE id = ?";
 			con = ConnectionUtil.getConnection();
 			ps = con.prepareStatement(query);
 
-			ps.setInt(1, id);
+			ps.setInt(1, productId);
 
 			rs = ps.executeQuery();
 
@@ -269,12 +268,69 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.print(e.getMessage());
-			throw new RuntimeException(e);
+			throw new PersistenceException(e.getMessage());
 		} finally {
-			ConnectionUtil.close(con, ps);
+			ConnectionUtil.close(con, ps, rs);
 		}
 
 		return flag;
+	}
+
+	public boolean DuplicateProductDoesNotAlreadyExists(Product product) throws PersistenceException {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean flag = true;
+
+		try {
+			String query = "SELECT 1 FROM products WHERE name = ? AND description = ? AND category_id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+
+			ps.setString(1, product.getName());
+			ps.setString(2, product.getDescription());
+			ps.setInt(3, product.getCategory().getId());
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				flag = false;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return flag;
+	}
+
+	public void delete(int id) throws PersistenceException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			String query = "UPDATE products SET status = ? WHERE status = 1 AND id = ?";
+			conn = ConnectionUtil.getConnection();
+			ps = conn.prepareStatement(query);
+
+			ps.setInt(1, 0);
+			ps.setInt(2, id);
+			ps.executeUpdate();
+
+			System.out.println("Product has been successfully deactivated");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(conn, ps);
+		}
+
 	}
 
 }

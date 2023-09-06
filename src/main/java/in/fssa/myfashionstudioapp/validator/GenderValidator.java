@@ -11,17 +11,17 @@ public class GenderValidator {
 	 * @param id
 	 * @throws ValidationException
 	 */
-	public static void rejectIfInvalidGender(int id) throws ValidationException {
+	public static void rejectIfInvalidGender(int genderId) throws ValidationException {
 
-		if (id < 0) {
+		if (genderId < 0) {
 			throw new ValidationException("Invalid gender input");
 		}
 	}
 
-	private static boolean checkIfGenderExits(int id) throws ValidationException {
+	private static boolean checkIfGenderExists(int genderId) throws ValidationException {
 		try {
-			GenderDAO genderDao = new GenderDAO();
-			return genderDao.genderAlreadyExists(id);
+			GenderDAO genderDAO = new GenderDAO();
+			return genderDAO.genderAlreadyExists(genderId);
 		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,9 +29,9 @@ public class GenderValidator {
 		}
 	}
 
-	public static void rejectIfGenderNotExists(int id) throws ValidationException {
-		if (!(checkIfGenderExits(id))) {
-			throw new ValidationException("Category with ID " + id + " does not exist");
+	public static void rejectIfGenderNotExists(int genderId) throws ValidationException {
+		if (!(checkIfGenderExists(genderId))) {
+			throw new ValidationException("Category with ID " + genderId + " does not exist");
 		}
 	}
 

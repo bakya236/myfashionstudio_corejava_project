@@ -3,7 +3,12 @@ package in.fssa.myfashionstudioapp.model;
 public class Size {
 
 	private int id;
-	private String Value;
+	private String value;
+
+	public Size(int id) {
+		// TODO Auto-generated constructor stub
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
@@ -14,16 +19,20 @@ public class Size {
 	}
 
 	public String getValue() {
-		return Value;
+		return value;
 	}
 
 	public void setValue(String value) {
-		Value = value;
+		this.value = value;
+	}
+
+	public Size() {
+
 	}
 
 	@Override
 	public String toString() {
-		return "Size [id=" + id + ", Value=" + Value + "]";
+		return "Size [id=" + id + ", value=" + value + "]";
 	}
 
 }

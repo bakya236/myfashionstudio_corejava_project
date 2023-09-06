@@ -11,9 +11,9 @@ public class CategoryValidator {
 	 * @param id
 	 * @throws ValidationException
 	 */
-	public static void rejectIfInvalidCategory(int id) throws ValidationException {
+	public static void rejectIfInvalidCategory(int CategoryId) throws ValidationException {
 
-		if (id < 0) {
+		if (CategoryId < 0) {
 			throw new ValidationException("Invalid catgeory input");
 		}
 
@@ -23,15 +23,17 @@ public class CategoryValidator {
 
 	// return true is exists
 
-	private static boolean checkIfCategeoryExits(int id) throws ValidationException {
+	private static boolean checkIfCategeoryExits(int CategoryId) throws ValidationException {
+		boolean flag;
 		try {
-			CategoryDAO categoryDao = new CategoryDAO();
-			return categoryDao.categoryAlreadyExists(id);
+			CategoryDAO categoryDAO = new CategoryDAO();
+			flag = categoryDAO.categoryAlreadyExists(CategoryId);
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new ValidationException(e.getMessage());
 		}
+
+		return flag;
 	}
 
 	/**
@@ -39,9 +41,9 @@ public class CategoryValidator {
 	 * @param id
 	 * @throws ValidationException
 	 */
-	public static void rejectIfCategoryNotExists(int id) throws ValidationException {
-		if (!(checkIfCategeoryExits(id))) {
-			throw new ValidationException("Category with ID " + id + " does not exist");
+	public static void rejectIfCategoryNotExists(int CategoryId) throws ValidationException {
+		if (!(checkIfCategeoryExits(CategoryId))) {
+			throw new ValidationException("Category with ID " + CategoryId + " does not exist");
 		}
 	}
 
