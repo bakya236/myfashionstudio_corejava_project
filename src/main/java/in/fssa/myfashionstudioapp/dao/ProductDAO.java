@@ -30,15 +30,16 @@ public class ProductDAO {
 		int productId = -1;
 
 		try {
-			String Query = "INSERT INTO products (name, description, category_id) VALUES(?,?,?) ";
+			String Query = "INSERT INTO products (image , name, description, category_id) VALUES(?,?,?,?) ";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(Query, PreparedStatement.RETURN_GENERATED_KEYS);
 
-			ps.setString(1, newProduct.getName());
-			ps.setString(2, newProduct.getDescription());
-			ps.setInt(3, newProduct.getCategory().getId());
+			ps.setString(1, newProduct.getImage());
+			ps.setString(2, newProduct.getName());
+			ps.setString(3, newProduct.getDescription());
+			ps.setInt(4, newProduct.getCategory().getId());
 
 			ps.executeUpdate();
 
@@ -77,7 +78,7 @@ public class ProductDAO {
 		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
-			String Query = "SELECT id , name , description , category_id FROM products WHERE status = 1";
+			String Query = "SELECT id ,image, name , description , category_id FROM products WHERE status = 1";
 
 			con = ConnectionUtil.getConnection();
 
@@ -89,6 +90,7 @@ public class ProductDAO {
 
 				ProductDTO productDTO = new ProductDTO();
 				productDTO.setId(rs.getInt("id"));
+				productDTO.setImage(rs.getString("image"));
 				productDTO.setName(rs.getString("name"));
 				productDTO.setDescription(rs.getString("description"));
 				productDTO.getCategory().setId(rs.getInt("category_id"));
@@ -124,7 +126,7 @@ public class ProductDAO {
 
 		try {
 
-			String Query = "SELECT id , name , description , category_id FROM products WHERE category_id = ? AND status = 1";
+			String Query = "SELECT id , image, name , description , category_id FROM products WHERE category_id = ? AND status = 1";
 
 			con = ConnectionUtil.getConnection();
 
@@ -138,6 +140,7 @@ public class ProductDAO {
 
 				ProductDTO productDTO = new ProductDTO();
 				productDTO.setId(rs.getInt("id"));
+				productDTO.setImage(rs.getString("image"));
 				productDTO.setName(rs.getString("name"));
 				productDTO.setDescription(rs.getString("description"));
 				productDTO.getCategory().setId(rs.getInt("category_id"));
@@ -159,6 +162,54 @@ public class ProductDAO {
 
 	}
 
+//	public List<Bag> findAllBagProducts(ArrayList<Bag> bagList) throws PersistenceException {
+//
+//		Connection con = null;
+//		PreparedStatement ps = null;
+//		ResultSet rs = null;
+//		List<Bag> baggedList = new ArrayList<>();
+//
+//		try {
+//
+//			String Query = "SELECT id , image, name , description , category_id FROM products WHERE id = ? AND status = 1";
+//
+//			con = ConnectionUtil.getConnection();
+//
+//			ps = con.prepareStatement(Query);
+//			
+////			/* for(Bag item) */
+//			
+//			
+//			//loop the bag list // get the product 
+//
+//			ps.setInt(1, categoryId);
+//
+//			rs = ps.executeQuery();
+//
+//			while (rs.next()) {
+//
+//				ProductDTO productDTO = new ProductDTO();
+//				productDTO.setId(rs.getInt("id"));
+//				productDTO.setImage(rs.getString("image"));
+//				productDTO.setName(rs.getString("name"));
+//				productDTO.setDescription(rs.getString("description"));
+//				productDTO.getCategory().setId(rs.getInt("category_id"));
+//
+////				how will i set the category name  
+//
+//				productDTOList.add(productDTO);
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			System.out.print(e.getMessage());
+//			throw new PersistenceException(e.getMessage());
+//		} finally {
+//			ConnectionUtil.close(con, ps, rs);
+//		}
+//		return productDTOList;
+//	}
+
 	/**
 	 * 
 	 * @param id
@@ -173,7 +224,7 @@ public class ProductDAO {
 		ProductDTO productDTO = null;
 
 		try {
-			String Query = "SELECT id , name , description , category_id  FROM products WHERE id = ? AND status = 1";
+			String Query = "SELECT id ,image , name , description , category_id  FROM products WHERE id = ? AND status = 1";
 
 			con = ConnectionUtil.getConnection();
 
@@ -186,6 +237,7 @@ public class ProductDAO {
 
 				productDTO = new ProductDTO();
 				productDTO.setId(rs.getInt("id"));
+				productDTO.setImage(rs.getString("image"));
 				productDTO.setName(rs.getString("name"));
 				productDTO.setDescription(rs.getString("description"));
 				productDTO.getCategory().setId(rs.getInt("category_id"));
@@ -216,15 +268,16 @@ public class ProductDAO {
 		PreparedStatement ps = null;
 
 		try {
-			String Query = "UPDATE products SET name = ? , description = ? WHERE id = ? AND status = 1";
+			String Query = "UPDATE products SET image = ? ,name = ? , description = ? WHERE id = ? AND status = 1";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(Query);
 
-			ps.setString(1, updatedProduct.getName());
-			ps.setString(2, updatedProduct.getDescription());
-			ps.setInt(3, updatedProduct.getId());
+			ps.setString(1, updatedProduct.getImage());
+			ps.setString(2, updatedProduct.getName());
+			ps.setString(3, updatedProduct.getDescription());
+			ps.setInt(4, updatedProduct.getId());
 
 			ps.executeUpdate();
 

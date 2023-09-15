@@ -11,6 +11,7 @@ import in.fssa.myfashionstudioapp.exception.ServiceException;
 
 import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Price;
+import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.validator.PriceValidator;
 
 public class PriceService {
@@ -45,12 +46,19 @@ public class PriceService {
 	 * @param id
 	 * @return
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
-	public Price FindFirstPriceByProductId(int id) throws ServiceException {
+	public Price FindFirstPriceByProductId(int id) throws ServiceException, ValidationException {
 		Price price = null;
 		try {
 			PriceDAO priceDAO = new PriceDAO();
 			price = priceDAO.FindFirstPriceByProductId(id);
+
+			SizeService Sizeservice = new SizeService();
+			Size size = Sizeservice.FindSizeBySizeId(price.getSize().getId());
+
+			price.getSize().setValue(size.getValue());
+
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
@@ -127,6 +135,7 @@ public class PriceService {
 
 			PriceDAO priceDAO = new PriceDAO();
 			price = priceDAO.findPriceByProductIdAndSizeId(productId, sizeId);
+
 			System.out.println("found the price with the given product id and size id");
 
 		} catch (PersistenceException e) {

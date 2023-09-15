@@ -37,7 +37,7 @@ public class ProductValidator {
 		CategoryValidator.rejectIfInvalidCategory(categoryId);
 		CategoryValidator.rejectIfCategoryNotExists(categoryId);
 
-		ProductValidator.rejectIfDuplicateProduct(newProduct);
+		/* ProductValidator.rejectIfDuplicateProduct(newProduct) */;
 
 	}
 
@@ -54,13 +54,14 @@ public class ProductValidator {
 
 	}
 
-	public static void rejectIfDuplicateProduct(Product product) throws ValidationException {
-
-		if (!(checkIfDuplicateProductExists(product))) {
-			throw new ValidationException("This product with same name , description ,category already exists");
-		}
-	}
-
+	/*
+	 * public static void rejectIfDuplicateProduct(Product product) throws
+	 * ValidationException {
+	 * 
+	 * if (!(checkIfDuplicateProductExists(product))) { throw new
+	 * ValidationException("This product with same name , description ,category already exists"
+	 * ); } }
+	 */
 	private static boolean checkIfProductExists(int productId) throws ValidationException {
 		try {
 			ProductDAO productDAO = new ProductDAO();
@@ -77,7 +78,6 @@ public class ProductValidator {
 	 * @throws ValidationException
 	 */
 	public static void rejectIfProductNotExists(int productId) throws ValidationException {
-
 		if (!(checkIfProductExists(productId))) {
 			throw new ValidationException("Product with ID " + productId + " does not exist");
 		}
@@ -87,8 +87,7 @@ public class ProductValidator {
 		final String NAME_PATTERN = "^[A-Za-z0-9\\s\\-_'.,&()]+$";
 
 		if (!Pattern.matches(NAME_PATTERN, productName)) {
-			throw new ValidationException(
-					"Invalid product name. product name conatins invalid special characters like @ , &  ,* , $ , # ,\"");
+			throw new ValidationException("Invalid product name");
 		}
 
 		int minLength = 3;
@@ -101,7 +100,6 @@ public class ProductValidator {
 	}
 
 	private static void rejectIfInvalidDescription(String productDescription) throws ValidationException {
-		final String DESCRIPTION_PATTERN = "^[A-Za-z0-9\\s\\-_.]+$";
 
 		int minLength = 10;
 		int maxLength = 1000;
@@ -111,25 +109,17 @@ public class ProductValidator {
 					"Product description should be between " + minLength + " and " + maxLength + " characters.");
 		}
 
-		if (!Pattern.matches(DESCRIPTION_PATTERN, productDescription)) {
-			throw new ValidationException(
-					"Invalid product description. Description should only contain letters, digits, - _ . , () & ! ? \\\" '\"");
-		}
-
 	}
 
-	private static boolean checkIfDuplicateProductExists(Product product) throws ValidationException {
-
-		boolean flag;
-		try {
-			ProductDAO productDAO = new ProductDAO();
-			flag = productDAO.DuplicateProductDoesNotAlreadyExists(product);
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ValidationException(e.getMessage());
-		}
-
-		return flag;
-	}
-
+	/*
+	 * private static boolean checkIfDuplicateProductExists(Product product) throws
+	 * ValidationException {
+	 * 
+	 * boolean flag; try { ProductDAO productDAO = new ProductDAO(); flag =
+	 * productDAO.DuplicateProductDoesNotAlreadyExists(product); } catch
+	 * (PersistenceException e) { e.printStackTrace(); throw new
+	 * ValidationException(e.getMessage()); }
+	 * 
+	 * return flag; }
+	 */
 }

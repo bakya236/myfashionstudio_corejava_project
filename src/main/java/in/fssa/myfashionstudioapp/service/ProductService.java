@@ -55,16 +55,13 @@ public class ProductService {
 				priceService.createPrice(price);
 			}
 
-			System.out.println("product and its prices created successfully");
+			System.out.println("product and its prices crceated successfully");
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error creating product and prices: " + e.getMessage());
 		}
 
 	}
-
-	// need to check
-	// findAllProductsWithFirstPriceAndSize
 
 	/**
 	 * 
@@ -116,6 +113,7 @@ public class ProductService {
 				priceList.add(eachPrice);
 
 				productDTO.setId(product.getId());
+				productDTO.setImage(product.getImage());
 				productDTO.setName(product.getName());
 				productDTO.setDescription(product.getDescription());
 				productDTO.setCategory(category);
@@ -229,10 +227,14 @@ public class ProductService {
 
 				PriceService priceService = new PriceService();
 				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId());
+				eachPrice.getSize().getId();
+
+//				
 
 				priceList.add(eachPrice);
 
 				productDTO.setId(product.getId());
+				productDTO.setImage(product.getImage());
 				productDTO.setName(product.getName());
 				productDTO.setDescription(product.getDescription());
 				productDTO.setCategory(product.getCategory());

@@ -8,7 +8,7 @@ import in.fssa.myfashionstudioapp.model.Product;
 
 public class ProductDTO extends Product {
 
-	private List<Price> priceList = new ArrayList<>();
+	protected List<Price> priceList = new ArrayList<>();
 
 	public List<Price> getPriceList() {
 		return priceList;

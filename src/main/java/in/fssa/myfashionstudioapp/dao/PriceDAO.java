@@ -214,7 +214,6 @@ public class PriceDAO {
 
 			if (rs.next()) {
 				price = new Price();
-
 				price.setId(rs.getInt("id"));
 				price.setPrice(rs.getDouble("price"));
 				price.getProduct().setId(rs.getInt("product_id"));

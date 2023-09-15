@@ -118,7 +118,7 @@ public class CategoryDAO {
 	 * @throws PersistenceException
 	 */
 	public boolean categoryAlreadyExists(int id) throws PersistenceException {
-
+		System.out.println(id + " k <======");
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;

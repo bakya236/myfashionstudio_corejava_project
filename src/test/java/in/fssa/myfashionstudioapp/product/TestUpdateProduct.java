@@ -23,17 +23,18 @@ public class TestUpdateProduct {
 	@Order(1)
 	public void updateProductWithValidInput() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 28;
-		productDto.setId(productId);
-		productDto.setName("dy t-shrt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setImage("https://iili.io/HSI63ua.webp");
+		ProductDTO.setName("dy t-shrt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -54,14 +55,14 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		//
 
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 		});
 	}
 
@@ -87,17 +88,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductNameWithNull() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName(null);
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName(null);
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -116,13 +117,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -138,17 +139,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductNameWithEmpty() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -167,13 +168,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -191,17 +192,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductNameWithInvalidFormat() {
 
-		ProductDTO productDTO = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDTO.setId(productId);
-		productDTO.setName("v-neck ?% neck T-shirt");
-		productDTO.setDescription("v-neck typography printed navy blue color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("v-neck ?% neck T-shirt");
+		ProductDTO.setDescription("v-neck typography printed navy blue color T-shirt ");
 
 		Category category = new Category(1);
-		productDTO.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDTO.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Price price1 = new Price();
@@ -216,17 +217,17 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDTO.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDTO);
+			productService.updateProduct(ProductDTO);
 
 		});
 
-		String expectedMessage = "Invalid product name. product name conatins invalid special characters like @ , &  ,* , $ , # ,\"";
+		String expectedMessage = "Invalid product name";
 
 		String actualMessage = exception.getMessage();
 
@@ -238,17 +239,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductNameWithInvalidLength() {
 
-		ProductDTO productDTO = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDTO.setId(productId);
-		productDTO.setName("v-");
-		productDTO.setDescription("v-neck typography printed navy blue color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("v-");
+		ProductDTO.setDescription("v-neck typography printed navy blue color T-shirt ");
 
 		Category category = new Category(1);
-		productDTO.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDTO.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Price price1 = new Price();
@@ -263,13 +264,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDTO.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDTO);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -284,17 +285,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductDescriptionWithNull() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription(null);
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription(null);
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -313,13 +314,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -335,17 +336,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductDescriptionWithEmpty() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -364,12 +365,12 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -383,63 +384,19 @@ public class TestUpdateProduct {
 	}
 
 	@Test
-	public void updateProductDescriptionWithInvalidFormat() {
-
-		ProductDTO productDTO = new ProductDTO();
-
-		productDTO.setName("v-neck neck T-shirt");
-		productDTO.setDescription("v-neck ??? + (typography printed navy blue color T-shirt || s)");
-
-		Category category = new Category(1);
-		productDTO.setCategory(category);
-
-		List<Price> priceList = productDTO.getPriceList();
-
-		Size size1 = new Size(1);
-		Price price1 = new Price();
-		price1.setSize(size1);
-		price1.setPrice(600.00d);
-
-		Size size2 = new Size(2);
-		Price price2 = new Price();
-		price2.setSize(size2);
-		price2.setPrice(400.00d);
-
-		priceList.add(price1);
-		priceList.add(price2);
-
-		productDTO.setPriceList(priceList);
-
-		ProductService productService = new ProductService();
-
-		Exception exception = assertThrows(ValidationException.class, () -> {
-
-			productService.updateProduct(productDTO);
-
-		});
-
-		String expectedMessage = "Invalid product description. Description should only contain letters, digits, - _ . , () & ! ? \\\" '\"";
-		String actualMessage = exception.getMessage();
-
-		System.out.println(actualMessage);
-
-		assertTrue(expectedMessage.equals(actualMessage));
-	}
-
-	@Test
 	public void updateProductDescriptionWithInvalidLength() {
 
-		ProductDTO productDTO = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDTO.setId(productId);
-		productDTO.setName("v-neck neck T-shirt");
-		productDTO.setDescription("v-n");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("v-neck neck T-shirt");
+		ProductDTO.setDescription("v-n");
 
 		Category category = new Category(1);
-		productDTO.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDTO.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Price price1 = new Price();
@@ -454,13 +411,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDTO.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDTO);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -475,17 +432,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithInvalidProductId() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int invalidProductId = -1;
-		productDto.setId(invalidProductId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(invalidProductId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(invalidProductId);
@@ -504,12 +461,12 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -525,17 +482,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithProductDoesNotExists() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int invalidProductId = 110;
-		productDto.setId(invalidProductId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(invalidProductId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(invalidProductId);
@@ -554,13 +511,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -576,18 +533,18 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithInvalidCategory() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		int invalidCategoryId = -1;
 		Category category = new Category(invalidCategoryId);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -606,13 +563,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -628,18 +585,18 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithCategoryDoesNotExist() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		int invalidCategoryId = 80;
 		Category category = new Category(invalidCategoryId);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -658,12 +615,12 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -679,17 +636,17 @@ public class TestUpdateProduct {
 
 	@Test
 	public void updateProductWithInvalidPriceNull() {
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -708,12 +665,12 @@ public class TestUpdateProduct {
 		priceList.add(null);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -729,17 +686,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithInvalidPrice() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -758,13 +715,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -780,17 +737,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithInvalidPriceLimit() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		Size size1 = new Size(1);
 		Product product1 = new Product(productId);
@@ -809,13 +766,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -830,17 +787,17 @@ public class TestUpdateProduct {
 
 	@Test
 	public void updateProductWithInvalidSizeInput() {
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		int invalidSizeId = -1;
 		Size size1 = new Size(invalidSizeId);
@@ -860,13 +817,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 
@@ -882,17 +839,17 @@ public class TestUpdateProduct {
 	@Test
 	public void updateProductWithSizeDoesNotExist() {
 
-		ProductDTO productDto = new ProductDTO();
+		ProductDTO ProductDTO = new ProductDTO();
 
 		int productId = 3;
-		productDto.setId(productId);
-		productDto.setName("white t-shirt");
-		productDto.setDescription("collared-neck cotton typography printed white color T-shirt ");
+		ProductDTO.setId(productId);
+		ProductDTO.setName("white t-shirt");
+		ProductDTO.setDescription("collared-neck cotton typography printed white color T-shirt ");
 
 		Category category = new Category(1);
-		productDto.setCategory(category);
+		ProductDTO.setCategory(category);
 
-		List<Price> priceList = productDto.getPriceList();
+		List<Price> priceList = ProductDTO.getPriceList();
 
 		int invalidSizeId = 70;
 		Size size1 = new Size(invalidSizeId);
@@ -912,13 +869,13 @@ public class TestUpdateProduct {
 		priceList.add(price1);
 		priceList.add(price2);
 
-		productDto.setPriceList(priceList);
+		ProductDTO.setPriceList(priceList);
 
 		ProductService productService = new ProductService();
 
 		Exception exception = assertThrows(ValidationException.class, () -> {
 
-			productService.updateProduct(productDto);
+			productService.updateProduct(ProductDTO);
 
 		});
 

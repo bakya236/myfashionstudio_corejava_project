@@ -2,6 +2,7 @@ package in.fssa.myfashionstudioapp.model;
 
 public class Product {
 	protected int id;
+	protected String image;
 	protected String name;
 	protected String description;
 	protected Category category = new Category();
@@ -45,6 +46,22 @@ public class Product {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	@Override
