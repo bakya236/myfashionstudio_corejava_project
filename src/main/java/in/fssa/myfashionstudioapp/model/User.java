@@ -10,6 +10,14 @@ public class User {
 
 	private boolean status;
 
+	public User(int id) {
+		this.id = id;
+	}
+
+	public User() {
+
+	}
+
 	public int getId() {
 		return id;
 	}

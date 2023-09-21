@@ -1,14 +1,17 @@
 package in.fssa.myfashionstudioapp.model;
 
-import in.fssa.myfashionstudioapp.dto.ProductDTO;
+public class Bag {
 
-public class Bag extends ProductDTO {
+	protected Product product;
+	protected int quantity;
+	protected Price price;
 
-	private int quantity;
-	private Size size = new Size();
+	public Product getProduct() {
+		return product;
+	}
 
-	public Bag() {
-
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public int getQuantity() {
@@ -19,18 +22,17 @@ public class Bag extends ProductDTO {
 		this.quantity = quantity;
 	}
 
-	public Size getSize() {
-		return size;
+	public Price getPrice() {
+		return price;
 	}
 
-	public void setSize(Size size) {
-		this.size = size;
+	public void setPrice(Price price) {
+		this.price = price;
 	}
 
 	@Override
 	public String toString() {
-		return "Bag [quantity=" + quantity + ", size=" + size + ", priceList=" + priceList + ", id=" + id + ", image="
-				+ image + ", name=" + name + ", description=" + description + ", category=" + category + ", status="
-				+ status + "]";
+		return "Bag [product=" + product + ", quantity=" + quantity + ", price=" + price + "]";
 	}
+
 }

@@ -196,6 +196,57 @@ public class ProductService {
 
 	}
 
+//	public Product findProductDetailsWithPriceByProductId(int id) throws ValidationException, ServiceException {
+//
+//		Product product = null;
+//
+//		try {
+//
+//			ProductValidator.rejectIfInvalidProduct(id);
+//			ProductValidator.rejectIfProductNotExists(id);
+//
+//			ProductDAO productDAO = new ProductDAO();
+//
+//			productDTO = productDAO.findByProducId(id); // {name,description,category,pricelist[]}
+//
+//			// set category name
+//			CategoryService categoryService = new CategoryService();
+//			Category category = categoryService.findCategoryByCategoryId(productDTO.getCategory().getId());
+//
+//			category.setId(category.getId());
+//			category.setName(category.getName());
+//
+//			// set gender name
+//			GenderService genderService = new GenderService();
+//			Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
+//			category.setGender(gender);
+//
+//			productDTO.setCategory(category);
+//
+//			PriceService PriceService = new PriceService();
+//			productDTO.setPriceList(PriceService.FindAllPricesByProductId(id)); // pricelist[{id,size_id,price},{},{}]
+//
+//			List<Price> priceList = productDTO.getPriceList();
+//
+//			for (Price price : priceList) {
+//				SizeService sizeService = new SizeService();
+//				Size eachSize = sizeService.FindSizeBySizeId(price.getSize().getId());
+//
+//				price.getSize().setId(eachSize.getId());
+//				price.getSize().setValue(eachSize.getValue());
+//			}
+//
+//			// to sysout the product details
+//			System.out.println(productDTO);
+//
+//			System.out.println("sucessfully retrieved the product details");
+//		} catch (PersistenceException e) {
+//			e.printStackTrace();
+//			throw new ServiceException("Error find product details : " + e.getMessage());
+//		}
+//		return product;
+//	}
+
 	/**
 	 * 
 	 * @param id

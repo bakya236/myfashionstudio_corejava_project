@@ -11,6 +11,10 @@ public class Price {
 	private LocalDateTime startedAt;
 	private LocalDateTime endedAt;
 
+	public Price(int id) {
+		this.id = id;
+	};
+
 	public Price() {
 
 	};

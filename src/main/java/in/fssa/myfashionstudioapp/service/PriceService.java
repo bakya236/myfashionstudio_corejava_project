@@ -153,4 +153,32 @@ public class PriceService {
 		priceService.createPrice(price);
 	}
 
+	public Price findPriceByPriceId(int priceId) throws ServiceException {
+
+		Price price = null;
+
+		try {
+
+			// need to check the productid in product table
+
+//			ProductValidator.rejectIfInvalidproduct(productId); // change
+
+			// need to check the sizeid in size table
+//
+//			SizeValidator.rejectIfSizeNotExists(sizeId);
+
+			PriceDAO priceDAO = new PriceDAO();
+			price = priceDAO.findById(priceId);
+
+			System.out.println("found the price");
+
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error finding price details :" + e.getMessage());
+		}
+
+		return price;
+
+	}
+
 }

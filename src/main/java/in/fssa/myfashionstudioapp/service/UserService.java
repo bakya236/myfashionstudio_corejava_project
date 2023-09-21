@@ -41,15 +41,19 @@ public class UserService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public void createUser(User newUser) throws ValidationException, ServiceException {
+	public int createUser(User newUser) throws ValidationException, ServiceException {
+
+		int userId;
 
 		try {
 			UserValidator.validateCreate(newUser);
-			userDAO.create(newUser);
+			userId = userDAO.create(newUser);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException(e.getMessage());
 		}
+
+		return userId;
 	}
 
 	public void updateUser(User newUser) throws ValidationException, ServiceException {

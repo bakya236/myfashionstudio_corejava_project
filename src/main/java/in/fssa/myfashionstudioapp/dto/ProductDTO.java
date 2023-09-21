@@ -18,10 +18,15 @@ public class ProductDTO extends Product {
 		this.priceList = priceList;
 	}
 
+//	@Override
+//	public String toString() {
+//		return "ProductDTO [priceList=" + priceList + ", id=" + id + ", name=" + name + ", description=" + description
+//				+ ", category=" + category + "]";
+//	}
+
 	@Override
 	public String toString() {
-		return "ProductDTO [priceList=" + priceList + ", id=" + id + ", name=" + name + ", description=" + description
-				+ ", category=" + category + "]";
+		return "ProductDTO [priceList=" + priceList + ", id=" + id + ", name=" + name + ", category=" + category + "]";
 	}
 
 }

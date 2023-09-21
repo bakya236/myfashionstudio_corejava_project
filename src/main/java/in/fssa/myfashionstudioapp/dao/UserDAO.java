@@ -55,28 +55,37 @@ public class UserDAO {
 	/**
 	 * 
 	 * @param new_User
+	 * @return
 	 * @throws PersistenceException
 	 */
 
-	public void create(User newUser) throws PersistenceException {
+	public int create(User newUser) throws PersistenceException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		int userId;
 
 		try {
 			String query = "INSERT INTO users(user_name, email, phone_number, password) VALUES (?,?,?,?)";
 			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
+			ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, newUser.getUserName().trim());
 			ps.setString(2, newUser.getEmail().trim());
 			ps.setLong(3, newUser.getPhoneNumber());
 			ps.setString(4, newUser.getPassword());
 			int rowsAffected = ps.executeUpdate();
-			if (rowsAffected > 0) {
-				System.out.println("User has been created sucessfully");
-			} else {
+
+			if (rowsAffected < 0) {
 				throw new PersistenceException("user has not been created");
+			}
+
+			rs = ps.getGeneratedKeys();
+
+			if (rs.next()) {
+				userId = rs.getInt(1);
+			} else {
+				throw new PersistenceException("Creating product failed, no ID obtained.");
 			}
 
 		} catch (SQLException e) {
@@ -85,6 +94,8 @@ public class UserDAO {
 		} finally {
 			ConnectionUtil.close(con, ps, rs);
 		}
+
+		return userId;
 	}
 
 	public void update(User newUser) throws PersistenceException {

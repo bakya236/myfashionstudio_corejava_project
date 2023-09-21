@@ -1,12 +1,14 @@
 package in.fssa.myfashionstudioapp.model;
 
 public class Product {
+
 	protected int id;
 	protected String image;
 	protected String name;
 	protected String description;
 	protected Category category = new Category();
 	protected boolean status;
+	private Price price;
 
 	public Product() {
 
@@ -64,9 +66,18 @@ public class Product {
 		this.status = status;
 	}
 
+	public Price getPrice() {
+		return price;
+	}
+
+	public void setPrice(Price price) {
+		this.price = price;
+	}
+
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", category=" + category + "]";
+		return "Product [id=" + id + ", image=" + image + ", name=" + name + ", description=" + description
+				+ ", category=" + category + ", status=" + status + ", price=" + price + "]";
 	}
 
 }

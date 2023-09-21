@@ -27,11 +27,11 @@ public class PriceDAO {
 		ResultSet rs = null;
 
 		try {
-			String Query = "INSERT INTO prices (product_id, size_id, price) VALUES (?,?,?)";
+			String query = "INSERT INTO prices (product_id, size_id, price) VALUES (?,?,?)";
 
 			con = ConnectionUtil.getConnection();
 
-			ps = con.prepareStatement(Query);
+			ps = con.prepareStatement(query);
 
 			ps.setInt(1, price.getProduct().getId());
 			ps.setInt(2, price.getSize().getId());
@@ -64,11 +64,11 @@ public class PriceDAO {
 		Price price = null;
 
 		try {
-			String Query = "SELECT id , price , started_at , ended_at , product_id , size_id FROM prices WHERE product_id = ? AND ended_at IS NULL LIMIT 1";
+			String query = "SELECT id , price , started_at , ended_at , product_id , size_id FROM prices WHERE product_id = ? AND ended_at IS NULL LIMIT 1";
 
 			con = ConnectionUtil.getConnection();
 
-			ps = con.prepareStatement(Query);
+			ps = con.prepareStatement(query);
 
 			ps.setInt(1, ProductId);
 
@@ -115,11 +115,11 @@ public class PriceDAO {
 
 		try {
 
-			String Query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND ended_at IS NULL";
+			String query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND ended_at IS NULL";
 
 			con = ConnectionUtil.getConnection();
 
-			ps = con.prepareStatement(Query);
+			ps = con.prepareStatement(query);
 
 			ps.setInt(1, ProductId);
 
@@ -160,11 +160,11 @@ public class PriceDAO {
 		ResultSet rs = null;
 
 		try {
-			String Query = "UPDATE prices SET ended_at = ? WHERE id = ?";
+			String query = "UPDATE prices SET ended_at = ? WHERE id = ?";
 
 			con = ConnectionUtil.getConnection();
 
-			ps = con.prepareStatement(Query);
+			ps = con.prepareStatement(query);
 
 			Timestamp sqlDateTime = Timestamp.valueOf(dateTime);
 
@@ -201,11 +201,11 @@ public class PriceDAO {
 		Price price = null;
 
 		try {
-			String Query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND size_id = ? AND ended_at IS NULL";
+			String query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND size_id = ? AND ended_at IS NULL";
 
 			con = ConnectionUtil.getConnection();
 
-			ps = con.prepareStatement(Query);
+			ps = con.prepareStatement(query);
 
 			ps.setInt(1, productId);
 			ps.setDouble(2, sizeId);
@@ -236,9 +236,51 @@ public class PriceDAO {
 
 		return price;
 	}
+//
+//	private LocalDateTime convertToLocalDateTime(Timestamp timestamp) {
+//		return timestamp.toLocalDateTime();
+//	}
 
-	private LocalDateTime convertToLocalDateTime(Timestamp timestamp) {
-		return timestamp.toLocalDateTime();
+	public Price findById(int priceId) throws PersistenceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Price price = null;
+
+		try {
+			String query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE id = ?";
+
+			con = ConnectionUtil.getConnection();
+
+			ps = con.prepareStatement(query);
+
+			ps.setInt(1, priceId);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				price = new Price();
+				price.setId(rs.getInt("id"));
+				price.setPrice(rs.getDouble("price"));
+				price.getProduct().setId(rs.getInt("product_id"));
+				price.getSize().setId(rs.getInt("size_id"));
+
+				System.out.println(price);
+
+				System.out.println("found the price");
+			} else {
+				System.out.println("price not found ");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return price;
 	}
 
 }
