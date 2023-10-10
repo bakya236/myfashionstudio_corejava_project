@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import in.fssa.myfashionstudioapp.service.OrderService;
 
-public class TestUpdateCancelOrder {
+public class TestFindAllOrderItemsByOrderId {
 
 	@Test
-	public void updateCancelOrder() {
+	public void findOrderByOrderId() {
 
 		OrderService orderService = new OrderService();
 
 		assertDoesNotThrow(() -> {
-			orderService.cancelOrder(18, "ordered by mistake");
+			orderService.FindOrderByOrderId("WZYC4ENYKO");
 		});
 
 	}

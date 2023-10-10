@@ -17,6 +17,7 @@ import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.model.Product;
 import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.model.User;
+import in.fssa.myfashionstudioapp.validator.order.OrderValidator;
 
 public class OrderService {
 
@@ -24,13 +25,7 @@ public class OrderService {
 
 		try {
 
-//			// validation
-//			ProductValidator.validateAll(newProduct);
-
-//			order validator 
-
-//			List<Price> priceList = newProduct.getPriceList();
-//			PriceValidator.validateAll(priceList);
+			OrderValidator.validateCreate(newOrder);
 
 			String orderCode = generateOrderCode();
 
@@ -40,7 +35,11 @@ public class OrderService {
 			newOrder.setOrderCode(orderCode.toString());
 			newOrder.setDeliveredAt(deliveredAt);
 
+			newOrder.setAddress(newOrder.getAddress());
+
 			OrderDAO orderDAO = new OrderDAO();
+
+			//
 
 			int OrderId = orderDAO.createOrder(newOrder);
 
@@ -51,6 +50,7 @@ public class OrderService {
 			for (OrderItem orderedItem : orderItemsList) {
 
 				OrderItem orderItem = new OrderItem();
+
 				Order order = new Order(OrderId);
 				orderItem.setOrder(order);
 				orderItem.setProduct(orderedItem.getProduct());
@@ -59,8 +59,6 @@ public class OrderService {
 
 				orderItemService.createOrderItem(orderItem);
 			}
-
-			System.out.println("order and its items created successfully");
 
 		} catch (PersistenceException e) {
 
@@ -130,13 +128,12 @@ public class OrderService {
 	public OrderDTO FindOrderByOrderId(String orderId) throws ValidationException, ServiceException {
 
 		OrderDAO orderDAO = new OrderDAO();
+
 		OrderDTO orderDTO = null;
 
 		try {
 
-			orderDTO = orderDAO.FindOrderByOrderId(orderId);
-
-			int getOrderId = orderDTO.getId();
+			orderDTO = orderDAO.FindOrderItemsByOrderId(orderId);
 
 			int getUserId = orderDTO.getUser().getId();
 
@@ -153,6 +150,8 @@ public class OrderService {
 
 				// have a join query to join these three table and give the product_details by
 				// product_id
+
+				orderItem.setId(orderItem.getId());
 
 				int productId = orderItem.getProduct().getId();
 
@@ -181,7 +180,9 @@ public class OrderService {
 		catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
+
 		return orderDTO;
 	}
 
@@ -191,8 +192,9 @@ public class OrderService {
 		// You can perform validation or additional checks here if needed
 
 		OrderItem orderItem = new OrderItem();
+
 		orderItem.setId(orderItemId);
-		orderItem.setStatus(true);
+		orderItem.setCancel(true);
 		orderItem.setCancelReason(cancelReason);
 
 		try {

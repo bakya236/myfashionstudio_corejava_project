@@ -90,8 +90,9 @@ public class OrderDAO {
 		try {
 			connection = ConnectionUtil.getConnection();
 
-			String query = "SELECT o.id, o.order_code ,o.total_price, o.ordered_at, o.delivered_at, oi.product_id, oi.price_id, oi.quantity , oi.status , oi.is_cancel , oi.cancel_reason"
-					+ "FROM orders o " + "INNER JOIN order_items oi ON o.id = oi.order_id " + "WHERE o.user_id = ?";
+			String query = "SELECT o.id, o.order_code ,o.total_price, o.ordered_at, o.delivered_at , oi.id , oi.order_id , oi.product_id, oi.price_id, oi.quantity , oi.status , oi.is_cancel , oi.cancel_reason "
+					+ "FROM orders o " + "INNER JOIN order_items oi ON o.id = oi.order_id "
+					+ "WHERE o.user_id = ? ORDER BY o.id DESC ";
 
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, userId);
@@ -100,15 +101,17 @@ public class OrderDAO {
 
 			int currentOrderId = -1;
 
-			System.out.println(currentOrderId);
-
 			OrderDTO currentOrderDTO = null;
 
 			while (rs.next()) {
 
-				int orderId = rs.getInt("id");
+				System.out.println(rs.getString("order_code"));
 
-				System.out.println(orderId);
+				System.out.println(rs.getBoolean("is_cancel"));
+
+				System.out.println(rs.getString("cancel_reason"));
+
+				int orderId = rs.getInt("id");
 
 				if (orderId != currentOrderId) {
 
@@ -134,11 +137,21 @@ public class OrderDAO {
 
 				Product product = new Product(rs.getInt("product_id"));
 				Price price = new Price(rs.getInt("price_id"));
-
+				orderItem.setId(rs.getInt("oi.id"));
 				orderItem.setProduct(product);
 				orderItem.setPrice(price);
+
+				/*
+				 * System.out.println(rs.getBoolean("status"));
+				 * 
+				 * System.out.println(rs.getBoolean("is_cancel"));
+				 * 
+				 * System.out.println(rs.getBoolean("cancel_reason"));
+				 */
+				System.out.println("enter");
+
 				orderItem.setQuantity(rs.getInt("quantity"));
-				orderItem.setStatus(rs.getBoolean("status"));
+				orderItem.setStatus(rs.getString("status"));
 				orderItem.setCancel(rs.getBoolean("is_cancel"));
 				orderItem.setCancelReason(rs.getString("cancel_reason"));
 
@@ -153,45 +166,51 @@ public class OrderDAO {
 			ConnectionUtil.close(connection, ps, rs);
 		}
 
+		System.out.println("====> " + orderDTOs);
 		return orderDTOs;
 	}
 
-	public OrderDTO FindOrderByOrderId(String orderId) throws PersistenceException {
+	public OrderDTO FindOrderItemsByOrderId(String orderId) throws PersistenceException {
 		Connection connection = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+
+		System.out.println("in find order ");
 
 		OrderDTO orderDTO = null; // Initialize as null
 
 		try {
 			connection = ConnectionUtil.getConnection();
 
-			String query = "SELECT o.id, o.order_code, o.user_id, o.total_price, o.ordered_at, o.delivered_at, oi.product_id, oi.price_id, oi.quantity , oi.is_cancel , oi.cancel_reason"
-					+ "FROM orders o INNER JOIN order_items oi ON o.id = oi.order_id "
+			String query = "SELECT o.id, o.order_code, o.user_id, o.total_price, o.ordered_at, o.delivered_at, oi.id , oi.order_id , oi.product_id, oi.price_id, oi.quantity , oi.status , oi.is_cancel , oi.cancel_reason "
+					+ "FROM orders o INNER JOIN order_items oi ON o.id =  oi.order_id "
 					+ "WHERE o.order_code = ? ORDER BY o.id DESC";
 
 			ps = connection.prepareStatement(query);
+
 			ps.setString(1, orderId);
 
-			rs = ps.executeQuery();
+			rs = ps.executeQuery(); // { [] }
 
 			String currentOrderId = "";
 
 			OrderDTO currentOrderDTO = null;
 
 			while (rs.next()) {
+
 				String getOrderId = rs.getString("order_code");
 
 				if (!getOrderId.equals(currentOrderId)) {
 
 					currentOrderDTO = new OrderDTO();
-					currentOrderDTO.setId(rs.getInt("id"));
+
+					currentOrderDTO.setId(rs.getInt("order_id"));
 					currentOrderDTO.setOrderCode(rs.getString("order_code"));
 					currentOrderDTO.setUser(new User(rs.getInt("user_id")));
-
 					currentOrderDTO.setTotalPrice(rs.getDouble("total_price"));
 					currentOrderDTO.setOrderredAt(rs.getTimestamp("ordered_at").toLocalDateTime());
 					currentOrderDTO.setDeliveredAt(rs.getTimestamp("delivered_at").toLocalDateTime());
+
 					currentOrderDTO.setOrderItemList(new ArrayList<>());
 
 					orderDTO = currentOrderDTO;
@@ -201,10 +220,17 @@ public class OrderDAO {
 				OrderItem orderItem = new OrderItem();
 				Product product = new Product(rs.getInt("product_id"));
 				Price price = new Price(rs.getInt("price_id"));
+
+				orderItem.setId(rs.getInt("oi.id"));
+
+				Order order = new Order();
+				order.setId(rs.getInt("order_id"));
+				orderItem.setOrder(order);
+
 				orderItem.setProduct(product);
 				orderItem.setPrice(price);
 				orderItem.setQuantity(rs.getInt("quantity"));
-				orderItem.setStatus(rs.getBoolean("status"));
+				orderItem.setStatus(rs.getString("status"));
 				orderItem.setCancelReason(rs.getString("cancel_reason"));
 				orderItem.setCancel(rs.getBoolean("is_cancel"));
 
@@ -218,7 +244,39 @@ public class OrderDAO {
 			ConnectionUtil.close(connection, ps, rs);
 		}
 
+		System.out.println("=====>" + orderDTO);
+
 		return orderDTO;
+	}
+
+	public boolean isOrderAlreadyExists(int orderId) throws PersistenceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean flag = false;
+
+		try {
+			String query = "SELECT 1 FROM orders WHERE id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+
+			ps.setInt(1, orderId);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				flag = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return flag;
 	}
 
 }

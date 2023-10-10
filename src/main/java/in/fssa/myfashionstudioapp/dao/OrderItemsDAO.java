@@ -50,16 +50,23 @@ public class OrderItemsDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
+		System.out.println("in ordern item");
+
+		System.out.println("in ordern item" + orderItem);
+
 		try {
 			con = ConnectionUtil.getConnection();
-			String query = "UPDATE order_items SET is_cancel = ? , cancel_reason = ? WHERE id = ?";
+			String query = "UPDATE order_items SET is_cancel = ?, cancel_reason = ? WHERE id = ?";
+
 			ps = con.prepareStatement(query);
 
-			ps.setBoolean(1, orderItem.getStatus());
+			ps.setBoolean(1, orderItem.isCancel());
 			ps.setString(2, orderItem.getCancelReason());
 			ps.setInt(3, orderItem.getId());
 
 			int rowsAffected = ps.executeUpdate();
+
+			System.out.print(rowsAffected);
 
 			if (rowsAffected <= 0) {
 				throw new PersistenceException("cannot cancel this order");
@@ -72,34 +79,5 @@ public class OrderItemsDAO {
 			ConnectionUtil.close(con, ps, rs);
 		}
 	}
-
-	/*
-	 * public void updateDeliveryStatus(int orderItemId) throws PersistenceException
-	 * {
-	 * 
-	 * Connection con = null; PreparedStatement ps = null; ResultSet rs = null;
-	 * 
-	 * try {
-	 * 
-	 * String Query =
-	 * "UPDATE prices SET status = ? WHERE status = on the way AND id = ?";
-	 * 
-	 * con = ConnectionUtil.getConnection();
-	 * 
-	 * ps = con.prepareStatement(Query);
-	 * 
-	 * ps.setString(1, ); ps.setInt(2, orderItemId);
-	 * 
-	 * int rowsAffected = ps.executeUpdate();
-	 * 
-	 * if (rowsAffected <= 0) { throw new
-	 * PersistenceException("Order creation failed"); }
-	 * 
-	 * } catch (SQLException e) { e.printStackTrace(); throw new
-	 * PersistenceException(e.getMessage()); } finally { ConnectionUtil.close(con,
-	 * ps, rs); }
-	 * 
-	 * }
-	 */
 
 }

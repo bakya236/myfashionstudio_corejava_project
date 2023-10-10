@@ -8,6 +8,7 @@ import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.exception.ServiceException;
 import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Category;
+import in.fssa.myfashionstudioapp.model.Gender;
 import in.fssa.myfashionstudioapp.validator.CategoryValidator;
 
 public class CategoryService {
@@ -56,6 +57,11 @@ public class CategoryService {
 			CategoryDAO categoryDAO = new CategoryDAO();
 
 			category = categoryDAO.findByCategoryId(categoryId);
+
+			GenderService genderService = new GenderService();
+			Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
+
+			category.getGender().setName(gender.getName());
 
 		} catch (PersistenceException e) {
 

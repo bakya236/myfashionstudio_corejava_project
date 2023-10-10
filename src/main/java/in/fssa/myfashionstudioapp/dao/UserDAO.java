@@ -4,53 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.model.User;
 import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class UserDAO {
-
-	/**
-	 * 
-	 * @return
-	 * @throws PersistenceException
-	 */
-
-	public List<User> findAll() throws PersistenceException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		List<User> userList = new ArrayList<User>();
-
-		try {
-
-			String query = "SELECT id,user_name,email,phone_number,password,status FROM users WHERE status = 1";
-			con = ConnectionUtil.getConnection();
-			ps = con.prepareStatement(query);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				User newUser = new User();
-				newUser.setId(rs.getInt("id"));
-				newUser.setUserName(rs.getString("user_name"));
-				newUser.setEmail(rs.getString("email"));
-				newUser.setPhoneNumber(rs.getLong("phone_number"));
-				newUser.setPassword(rs.getString("password"));
-				newUser.setStatus(rs.getBoolean("status"));
-				userList.add(newUser);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			ConnectionUtil.close(con, ps, rs);
-		}
-		return userList;
-	}
 
 	/**
 	 * 
@@ -334,6 +293,7 @@ public class UserDAO {
 			if (rs.next()) {
 				user = rs.getInt("id");
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new PersistenceException(e.getMessage());

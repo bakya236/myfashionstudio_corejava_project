@@ -283,4 +283,34 @@ public class PriceDAO {
 		return price;
 	}
 
+	public boolean isPriceAlreadyExists(int priceId) throws PersistenceException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean flag = false;
+
+		try {
+			String query = "SELECT 1 FROM prices WHERE id = ?";
+			con = ConnectionUtil.getConnection();
+			ps = con.prepareStatement(query);
+
+			ps.setInt(1, priceId);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				flag = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return flag;
+	}
+
 }

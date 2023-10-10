@@ -1,6 +1,8 @@
 package in.fssa.myfashionstudioapp.service;
 
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import in.fssa.myfashionstudioapp.dao.UserDAO;
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
@@ -15,28 +17,6 @@ public class UserService {
 
 	/**
 	 * 
-	 * @return
-	 * @throws ServiceException
-	 */
-
-	public List<User> getAllUsers() throws ServiceException {
-
-		List<User> userList;
-		try {
-
-			userList = userDAO.findAll();
-
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ServiceException("Failed to retrieve all users" + e.getMessage());
-		}
-
-		return userList;
-
-	}
-
-	/**
-	 * 
 	 * @param newUser
 	 * @throws ValidationException
 	 * @throws ServiceException
@@ -47,6 +27,9 @@ public class UserService {
 
 		try {
 			UserValidator.validateCreate(newUser);
+
+			newUser.setPassword(hashPassword(newUser.getPassword()));
+
 			userId = userDAO.create(newUser);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -101,6 +84,7 @@ public class UserService {
 	public User findById(int id) throws ValidationException, ServiceException {
 
 		try {
+
 			UserValidator.rejetcIfUserDoesNotExists(id);
 
 			return userDAO.findById(id);
@@ -142,12 +126,13 @@ public class UserService {
 	public int logIn(String email, String Password) throws ValidationException, ServiceException {
 
 		int userId;
-		try {
 
+		try {
 			UserValidator.validateLogIn(email, Password);
 
 			UserDAO userDAO = new UserDAO();
-			userId = userDAO.logIn(email, Password);
+
+			userId = userDAO.logIn(email, hashPassword(Password));
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -155,4 +140,26 @@ public class UserService {
 		}
 		return userId;
 	}
+
+// encryption
+
+	private static String hashPassword(String password) throws ServiceException {
+		try {
+			
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+
+			// Convert the byte array to a hexadecimal string
+			StringBuilder sb = new StringBuilder();
+
+			for (byte b : hashedBytes) {
+				sb.append(String.format("%02x", b));
+			}
+
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			throw new ServiceException(e.getMessage());
+		}
+	}
+
 }

@@ -2,6 +2,8 @@ package in.fssa.myfashionstudioapp.validator;
 
 import java.util.List;
 
+import in.fssa.myfashionstudioapp.dao.PriceDAO;
+import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Price;
 
@@ -56,6 +58,28 @@ public class PriceValidator {
 			// business validation - reject If Size Not Exists
 			SizeValidator.rejectIfSizeNotExists(price.getSize().getId());
 		}
+	}
+
+	public static void rejectIfPriceNotExists(int priceId) throws ValidationException {
+
+		if (!checkIfPriceAlreadyExists(priceId)) {
+			throw new ValidationException("Price with ID " + priceId + " does not exist");
+		}
+
+	}
+
+	private static boolean checkIfPriceAlreadyExists(int priceId) throws ValidationException {
+		boolean flag;
+		try {
+
+			PriceDAO priceDAO = new PriceDAO();
+			flag = priceDAO.isPriceAlreadyExists(priceId);
+
+		} catch (PersistenceException e) {
+			throw new ValidationException(e.getMessage());
+		}
+
+		return flag;
 	}
 
 }

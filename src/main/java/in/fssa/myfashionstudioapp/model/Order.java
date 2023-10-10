@@ -22,6 +22,11 @@ public class Order {
 
 	}
 
+	public Order(int id, String orderCode) {
+		// TODO Auto-generated constructor stub
+
+	}
+
 	public int getId() {
 		return id;
 	}

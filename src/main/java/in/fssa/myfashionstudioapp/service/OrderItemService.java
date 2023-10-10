@@ -5,6 +5,7 @@ import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.exception.ServiceException;
 import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.OrderItem;
+import in.fssa.myfashionstudioapp.validator.order.OrderItemValidator;
 
 public class OrderItemService {
 
@@ -12,11 +13,7 @@ public class OrderItemService {
 
 		try {
 
-			// to incude validations
-
-//			PriceValidator.validate(price);
-
-			System.out.println("in service");
+			OrderItemValidator.validateCreate(orderItem);
 
 			OrderItemsDAO orderItemsDAO = new OrderItemsDAO();
 			orderItemsDAO.create(orderItem);

@@ -69,7 +69,6 @@ public class UserValidator {
 		StringUtil.rejectIfInvalidString(password, "Password");
 
 		UserValidator.rejectIfInvalidEmail(email);
-		UserValidator.rejectIfInvalidPassword(password);
 	}
 
 	private static void rejectIfInvalidUserName(String userName) throws ValidationException {

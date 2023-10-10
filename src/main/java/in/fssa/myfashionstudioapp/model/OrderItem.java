@@ -4,7 +4,7 @@ public class OrderItem extends Bag {
 
 	private int id;
 	private Order order;
-	private boolean status;
+	private String status;
 	private boolean isCancel;
 	private String cancelReason;
 
@@ -24,20 +24,20 @@ public class OrderItem extends Bag {
 		this.order = order;
 	}
 
-	public boolean getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
+	public void setStatus(String string) {
+		this.status = string;
 	}
 
 	public boolean isCancel() {
 		return isCancel;
 	}
 
-	public void setCancel(boolean isCancel) {
-		this.isCancel = isCancel;
+	public void setCancel(boolean b) {
+		this.isCancel = b;
 	}
 
 	public String getCancelReason() {
