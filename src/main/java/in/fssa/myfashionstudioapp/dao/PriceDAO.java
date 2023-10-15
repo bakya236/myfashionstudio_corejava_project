@@ -11,6 +11,8 @@ import java.util.List;
 
 import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.model.Price;
+import in.fssa.myfashionstudioapp.model.Product;
+import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.util.ConnectionUtil;
 
 public class PriceDAO {
@@ -64,7 +66,7 @@ public class PriceDAO {
 		Price price = null;
 
 		try {
-			String query = "SELECT id , price , started_at , ended_at , product_id , size_id FROM prices WHERE product_id = ? AND ended_at IS NULL LIMIT 1";
+			String query = "SELECT id , price ,offer, started_at , ended_at , product_id , size_id FROM prices WHERE product_id = ? AND ended_at IS NULL LIMIT 1";
 
 			con = ConnectionUtil.getConnection();
 
@@ -84,6 +86,7 @@ public class PriceDAO {
 				price.getProduct().setId(rs.getInt("product_id"));
 				price.getSize().setId(rs.getInt("size_id"));
 				price.setPrice(rs.getDouble("price"));
+				price.setOffer(rs.getDouble("offer"));
 
 				System.out.println("Retrieved the price details");
 			} else {
@@ -115,7 +118,7 @@ public class PriceDAO {
 
 		try {
 
-			String query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND ended_at IS NULL";
+			String query = "SELECT  id , price ,offer, started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND ended_at IS NULL";
 
 			con = ConnectionUtil.getConnection();
 
@@ -132,6 +135,7 @@ public class PriceDAO {
 				price.getProduct().setId(rs.getInt("product_id"));
 				price.getSize().setId(rs.getInt("size_id"));
 				price.setPrice(rs.getDouble("price"));
+				price.setOffer(rs.getDouble("offer"));
 
 				priceList.add(price);
 
@@ -201,7 +205,7 @@ public class PriceDAO {
 		Price price = null;
 
 		try {
-			String query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND size_id = ? AND ended_at IS NULL";
+			String query = "SELECT  id , price ,offer, started_at , ended_at , product_id , size_id  FROM prices WHERE product_id = ? AND size_id = ? AND ended_at IS NULL";
 
 			con = ConnectionUtil.getConnection();
 
@@ -215,9 +219,15 @@ public class PriceDAO {
 			if (rs.next()) {
 				price = new Price();
 				price.setId(rs.getInt("id"));
+				price.setOffer(rs.getInt("offer"));
 				price.setPrice(rs.getDouble("price"));
-				price.getProduct().setId(rs.getInt("product_id"));
-				price.getSize().setId(rs.getInt("size_id"));
+
+				Product product = new Product(rs.getInt("product_id"));
+				price.setProduct(product);
+
+				Size size = new Size(rs.getInt("size_id"));
+
+				price.setSize(size);
 
 				System.out.println(price);
 
@@ -248,7 +258,7 @@ public class PriceDAO {
 		Price price = null;
 
 		try {
-			String query = "SELECT  id , price , started_at , ended_at , product_id , size_id  FROM prices WHERE id = ?";
+			String query = "SELECT  id , price ,offer, started_at , ended_at , product_id , size_id  FROM prices WHERE id = ?";
 
 			con = ConnectionUtil.getConnection();
 
@@ -262,10 +272,13 @@ public class PriceDAO {
 				price = new Price();
 				price.setId(rs.getInt("id"));
 				price.setPrice(rs.getDouble("price"));
-				price.getProduct().setId(rs.getInt("product_id"));
-				price.getSize().setId(rs.getInt("size_id"));
+				price.setOffer(rs.getDouble("offer"));
 
-				System.out.println(price);
+				Product product = new Product(rs.getInt("product_id"));
+				price.setProduct(product);
+
+				Size size = new Size(rs.getInt("size_id"));
+				price.setSize(size);
 
 				System.out.println("found the price");
 			} else {

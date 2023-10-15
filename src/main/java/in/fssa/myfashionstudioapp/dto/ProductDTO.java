@@ -26,7 +26,12 @@ public class ProductDTO extends Product {
 
 	@Override
 	public String toString() {
-		return "ProductDTO [priceList=" + priceList + ", id=" + id + ", name=" + name + ", category=" + category + "]";
+		return "ProductDTO [priceList=" + priceList + ", id=" + id + ", image=" + image + ", name=" + name
+				+ ", pattern=" + pattern + ", fit=" + fit + ", material=" + material + ", length=" + length
+				+ ", riseType=" + riseType + ", closureType=" + closureType + ", sleeveType=" + sleeveType
+				+ ", necklineType=" + necklineType + ", occasion=" + occasion + ", care=" + care + ", stock=" + stock
+				+ ", buyersCount=" + buyersCount + ", description=" + description + ", color=" + color + ", category="
+				+ category + ", status=" + status + "]";
 	}
 
 }

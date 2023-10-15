@@ -10,10 +10,8 @@ import in.fssa.myfashionstudioapp.exception.PersistenceException;
 import in.fssa.myfashionstudioapp.exception.ServiceException;
 import in.fssa.myfashionstudioapp.exception.ValidationException;
 import in.fssa.myfashionstudioapp.model.Category;
-import in.fssa.myfashionstudioapp.model.Gender;
 import in.fssa.myfashionstudioapp.model.Price;
 import in.fssa.myfashionstudioapp.model.Product;
-import in.fssa.myfashionstudioapp.model.Size;
 import in.fssa.myfashionstudioapp.validator.CategoryValidator;
 import in.fssa.myfashionstudioapp.validator.GenderValidator;
 import in.fssa.myfashionstudioapp.validator.PriceValidator;
@@ -64,10 +62,11 @@ public class ProductService {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves a list of all products from the database.
+	 *
+	 * @return A list of ProductDTO objects containing product information.
+	 * @throws ValidationException If validation of data fails.
+	 * @throws ServiceException    If an error occurs while retrieving products.
 	 */
 
 	public List<ProductDTO> getAllProducts() throws ValidationException, ServiceException {
@@ -78,56 +77,8 @@ public class ProductService {
 
 			ProductDAO productDAO = new ProductDAO();
 
-			List<ProductDTO> ProductList = productDAO.findAll(); // [{id,name,description,category},{},{}]
+			productDTOList = productDAO.findAll(); // [{id,name,description,category},{},{}]
 
-			for (Product product : ProductList) {
-
-				// product ==> {id,name,description,category}
-
-				ProductDTO productDTO = new ProductDTO();
-
-				// set category name
-				CategoryService categoryService = new CategoryService();
-				Category category = categoryService.findCategoryByCategoryId(product.getCategory().getId());
-				// set gender name
-				GenderService genderService = new GenderService();
-
-				Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
-
-				// set the gender name
-				gender.setId(gender.getId());
-				gender.setName(gender.getName());
-
-				category.setGender(gender);
-
-				List<Price> priceList = productDTO.getPriceList();
-
-				PriceService priceService = new PriceService();
-				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId()); // {price,products_id,sizes_id,started_at,ended_at}
-
-				// set size value
-				SizeService sizeService = new SizeService();
-				Size size = sizeService.FindSizeBySizeId(eachPrice.getSize().getId());
-				eachPrice.setSize(size);
-
-				priceList.add(eachPrice);
-
-				productDTO.setId(product.getId());
-				productDTO.setImage(product.getImage());
-				productDTO.setName(product.getName());
-				productDTO.setDescription(product.getDescription());
-				productDTO.setCategory(category);
-				productDTO.setPriceList(priceList);
-
-				productDTOList.add(productDTO);
-
-			}
-
-			System.out.println("All products are sucessfully retrieved");
-
-		} catch (ValidationException e) {
-			// Handle validation errors (e.g., provide user-friendly error messages)
-			throw new ValidationException("Validation error: " + e.getMessage());
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new ServiceException("Error finding all products : " + e.getMessage());
@@ -138,172 +89,134 @@ public class ProductService {
 	}
 
 	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves detailed information about a product based on its unique identifier
+	 * (ID) from the database.
+	 *
+	 * This method fetches detailed information about a product, including its name,
+	 * description, category,color and associated price list, from the database. It
+	 * performs validation checks to ensure the provided product ID is valid and
+	 * that the product exists in the database.
+	 *
+	 * @param productId The unique identifier (ID) of the product for which details
+	 *                  are to be retrieved.
+	 * @return A ProductDTO object containing comprehensive product information,
+	 *         including its name, description, category, color and a list of
+	 *         prices.
+	 * @throws ValidationException If the provided product ID is invalid or does not
+	 *                             meet the required validation criteria.
+	 * @throws ServiceException    If an error occurs during the retrieval of
+	 *                             product details from the database, such as a
+	 *                             database connection issue or query error.
 	 */
-	public ProductDTO findProductDetailsByProductId(int id) throws ValidationException, ServiceException {
+	public ProductDTO findProductDetailsByProductId(int productId) throws ValidationException, ServiceException {
 
 		ProductDTO productDTO = null;
 
 		try {
 
-			ProductValidator.rejectIfInvalidProduct(id);
-			ProductValidator.rejectIfProductNotExists(id);
+			ProductValidator.rejectIfInvalidProduct(productId);
+			ProductValidator.rejectIfProductNotExists(productId);
 
 			ProductDAO productDAO = new ProductDAO();
 
-			productDTO = productDAO.findByProducId(id); // {name,description,category,pricelist[]}
+			productDTO = productDAO.findByProducId(productId); // {name,description,category,pricelist[]}
 
-			// set category name
-			CategoryService categoryService = new CategoryService();
-			Category category = categoryService.findCategoryByCategoryId(productDTO.getCategory().getId());
-
-			category.setId(category.getId());
-			category.setName(category.getName());
-
-			// set gender name
-			GenderService genderService = new GenderService();
-			Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
-			category.setGender(gender);
-
-			productDTO.setCategory(category);
-
-			PriceService PriceService = new PriceService();
-			productDTO.setPriceList(PriceService.FindAllPricesByProductId(id)); // pricelist[{id,size_id,price},{},{}]
-
-			List<Price> priceList = productDTO.getPriceList();
-
-			for (Price price : priceList) {
-				SizeService sizeService = new SizeService();
-				Size eachSize = sizeService.FindSizeBySizeId(price.getSize().getId());
-
-				price.getSize().setId(eachSize.getId());
-				price.getSize().setValue(eachSize.getValue());
-			}
-
-			// to sysout the product details
-			System.out.println(productDTO);
-
-			System.out.println("sucessfully retrieved the product details");
 		} catch (PersistenceException e) {
 			e.printStackTrace();
-			throw new ServiceException("Error find product details : " + e.getMessage());
+			throw new ServiceException("Error finding product details : " + e.getMessage());
 		}
 		return productDTO;
 
 	}
 
-//	public Product findProductDetailsWithPriceByProductId(int id) throws ValidationException, ServiceException {
-//
-//		Product product = null;
-//
-//		try {
-//
-//			ProductValidator.rejectIfInvalidProduct(id);
-//			ProductValidator.rejectIfProductNotExists(id);
-//
-//			ProductDAO productDAO = new ProductDAO();
-//
-//			productDTO = productDAO.findByProducId(id); // {name,description,category,pricelist[]}
-//
-//			// set category name
-//			CategoryService categoryService = new CategoryService();
-//			Category category = categoryService.findCategoryByCategoryId(productDTO.getCategory().getId());
-//
-//			category.setId(category.getId());
-//			category.setName(category.getName());
-//
-//			// set gender name
-//			GenderService genderService = new GenderService();
-//			Gender gender = genderService.findGenderBygenderId(category.getGender().getId());
-//			category.setGender(gender);
-//
-//			productDTO.setCategory(category);
-//
-//			PriceService PriceService = new PriceService();
-//			productDTO.setPriceList(PriceService.FindAllPricesByProductId(id)); // pricelist[{id,size_id,price},{},{}]
-//
-//			List<Price> priceList = productDTO.getPriceList();
-//
-//			for (Price price : priceList) {
-//				SizeService sizeService = new SizeService();
-//				Size eachSize = sizeService.FindSizeBySizeId(price.getSize().getId());
-//
-//				price.getSize().setId(eachSize.getId());
-//				price.getSize().setValue(eachSize.getValue());
-//			}
-//
-//			// to sysout the product details
-//			System.out.println(productDTO);
-//
-//			System.out.println("sucessfully retrieved the product details");
-//		} catch (PersistenceException e) {
-//			e.printStackTrace();
-//			throw new ServiceException("Error find product details : " + e.getMessage());
-//		}
-//		return product;
-//	}
-
 	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws ValidationException
-	 * @throws ServiceException
+	 * Retrieves a list of products that belong to a specific category from the
+	 * database.
+	 *
+	 * This method retrieves a list of products that are categorized under a
+	 * specific category based on its unique identifier (ID) from the database. It
+	 * performs validation checks to ensure the provided category ID is valid and
+	 * that the category exists in the database.
+	 *
+	 * @param categoryId The unique identifier (ID) of the category for which
+	 *                   products are to be retrieved.
+	 * @return A list of ProductDTO objects containing information about products
+	 *         within the specified category.
+	 * @throws ValidationException If the provided category ID is invalid or does
+	 *                             not meet the required validation criteria.
+	 * @throws ServiceException    If an error occurs during the retrieval of
+	 *                             products by category ID, such as a database
+	 *                             connection issue or query error.
 	 */
 
-	public List<ProductDTO> findAllProductsByCategoryId(int id) throws ValidationException, ServiceException {
+	public List<ProductDTO> findAllProductsByCategoryId(int categoryId) throws ValidationException, ServiceException {
 
 		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
 
-			CategoryValidator.rejectIfInvalidCategory(id);
+			CategoryValidator.rejectIfInvalidCategory(categoryId);
 
 			// business validation
-			CategoryValidator.rejectIfCategoryNotExists(id);
+			CategoryValidator.rejectIfCategoryNotExists(categoryId);
 
 			ProductDAO productDAO = new ProductDAO();
 
-			List<ProductDTO> ProductList = productDAO.findAllByCategoryId(id); // [{id,name,description,category,pricelist},{},{}]
-
-			for (Product product : ProductList) {
-
-				ProductDTO productDTO = new ProductDTO();
-
-				List<Price> priceList = productDTO.getPriceList(); // []
-
-				PriceService priceService = new PriceService();
-				Price eachPrice = priceService.FindFirstPriceByProductId(product.getId());
-				eachPrice.getSize().getId();
-
-//				
-
-				priceList.add(eachPrice);
-
-				productDTO.setId(product.getId());
-				productDTO.setImage(product.getImage());
-				productDTO.setName(product.getName());
-				productDTO.setDescription(product.getDescription());
-				productDTO.setCategory(product.getCategory());
-				productDTO.setPriceList(priceList);
-
-				productDTOList.add(productDTO);
-
-			}
-
-			System.out.println("All products are sucessfully retrieved");
+			productDTOList = productDAO.findAllByCategoryId(categoryId);
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
-			throw new ServiceException("Error find all products : " + e.getMessage());
+			throw new ServiceException("Error finding all products by category id: " + e.getMessage());
 		}
 
 		return productDTOList;
 
+	}
+
+	public List<ProductDTO> findProductsByProductName(String name) throws ServiceException {
+		List<ProductDTO> productDTOList = new ArrayList<>();
+
+		try {
+			ProductDAO productDAO = new ProductDAO();
+			productDTOList = productDAO.findByName(name);
+			System.out.println("Successfully got all products ny name");
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error finding all products by name" + e.getMessage());
+		}
+
+		return productDTOList;
+	}
+
+	public List<ProductDTO> findProductsByGenderName(String genderName) throws ServiceException {
+		List<ProductDTO> productDTOList = new ArrayList<>();
+
+		try {
+			ProductDAO productDAO = new ProductDAO();
+			productDTOList = productDAO.findByGenderName(genderName);
+			System.out.println("Successfully found all product by gender name");
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error finding all products by gender name" + e.getMessage());
+		}
+
+		return productDTOList;
+	}
+
+	public List<ProductDTO> findProductsByGenderNameAndCategoryName(String genderName, String categoryName)
+			throws ServiceException {
+		List<ProductDTO> productDTOList = new ArrayList<>();
+
+		try {
+			ProductDAO productDAO = new ProductDAO();
+			productDTOList = productDAO.findByGenderNameAndCategoryName(genderName, categoryName);
+			System.out.println("Successfully found all product by gender name and category name");
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error finding all products by gender name and category name" + e.getMessage());
+		}
+
+		return productDTOList;
 	}
 
 	/**

@@ -31,21 +31,15 @@ public class AddressService {
 
 //		TODO:VALIDATE ADDRESS
 
-		/* AddressValidator.validateAddress(newAddress); */
-
-		System.out.println("in service===========================>" + newAddress);
-
 		AddressDAO addressDAO = new AddressDAO();
 
 		try {
-			addressDAO.create(newAddress);
+			addressDAO.update(newAddress);
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
-			throw new ServiceException("Error creating address : " + e.getMessage());
+			throw new ServiceException("Error updating address : " + e.getMessage());
 		}
-
-		System.out.println("Address created sucessfully");
 
 	}
 
@@ -57,6 +51,24 @@ public class AddressService {
 		Address address = null;
 		try {
 			address = addressDAO.findByUserId(userId);
+		} catch (PersistenceException e) {
+
+			e.printStackTrace();
+
+			throw new ServiceException(e.getMessage());
+		}
+		return address;
+
+	}
+
+	public Address findAddressByAddressId(int addressId) throws ServiceException {
+
+//		TODO: VALIDATE ADDRESS ID
+
+		AddressDAO addressDAO = new AddressDAO();
+		Address address = null;
+		try {
+			address = addressDAO.findByAddressId(addressId);
 		} catch (PersistenceException e) {
 
 			e.printStackTrace();

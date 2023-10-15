@@ -40,6 +40,11 @@
 			<version>5.7.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>in.bakyalakshmi</groupId>
+			<artifactId>myfashiostudio</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 

@@ -9,22 +9,33 @@ import org.junit.jupiter.api.Test;
 import in.fssa.myfashionstudioapp.dto.ProductDTO;
 import in.fssa.myfashionstudioapp.service.ProductService;
 
-public class TestGetAllProductswithFirstSizeAndPrice {
+public class TestGetAllProducts {
+
+	/**
+	 * Tests the retrieval of all products from the ProductService and prints their
+	 * details.
+	 *
+	 * This test method initializes a ProductService, retrieves a list of all
+	 * products, and then iterates through the list, printing the details of each
+	 * product to the console. It uses the assertDoesNotThrow to handle exceptions
+	 * that may occur during the test.
+	 */
 
 	@Test
-	public void getAllProductswithFirstSizeAndPrice() {
+	public void testGetAllProducts() {
 
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
 			List<ProductDTO> productList = productService.getAllProducts();
 
-			// to sysout the products
 			for (ProductDTO productPrice : productList) {
 
 				System.out.println(productPrice);
 			}
+
 		});
+
 	}
 
 }

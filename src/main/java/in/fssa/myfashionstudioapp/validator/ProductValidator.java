@@ -111,15 +111,16 @@ public class ProductValidator {
 
 	}
 
-	/*
-	 * private static boolean checkIfDuplicateProductExists(Product product) throws
-	 * ValidationException {
-	 * 
-	 * boolean flag; try { ProductDAO productDAO = new ProductDAO(); flag =
-	 * productDAO.DuplicateProductDoesNotAlreadyExists(product); } catch
-	 * (PersistenceException e) { e.printStackTrace(); throw new
-	 * ValidationException(e.getMessage()); }
-	 * 
-	 * return flag; }
-	 */
 }
+
+/*
+ * private static boolean checkIfDuplicateProductExists(Product product) throws
+ * ValidationException {
+ * 
+ * boolean flag; try { ProductDAO productDAO = new ProductDAO(); flag =
+ * productDAO.DuplicateProductDoesNotAlreadyExists(product); } catch
+ * (PersistenceException e) { e.printStackTrace(); throw new
+ * ValidationException(e.getMessage()); }
+ * 
+ * return flag; }
+ */

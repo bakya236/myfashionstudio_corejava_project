@@ -105,12 +105,6 @@ public class OrderDAO {
 
 			while (rs.next()) {
 
-				System.out.println(rs.getString("order_code"));
-
-				System.out.println(rs.getBoolean("is_cancel"));
-
-				System.out.println(rs.getString("cancel_reason"));
-
 				int orderId = rs.getInt("id");
 
 				if (orderId != currentOrderId) {
@@ -120,7 +114,6 @@ public class OrderDAO {
 					currentOrderDTO.setOrderCode(rs.getString("order_code"));
 
 					User user = new User(userId);
-
 					currentOrderDTO.setUser(user);
 					currentOrderDTO.setTotalPrice(rs.getDouble("total_price"));
 					currentOrderDTO.setOrderredAt(rs.getTimestamp("ordered_at").toLocalDateTime());
@@ -137,19 +130,10 @@ public class OrderDAO {
 
 				Product product = new Product(rs.getInt("product_id"));
 				Price price = new Price(rs.getInt("price_id"));
+				price.setProduct(product);
 				orderItem.setId(rs.getInt("oi.id"));
 				orderItem.setProduct(product);
 				orderItem.setPrice(price);
-
-				/*
-				 * System.out.println(rs.getBoolean("status"));
-				 * 
-				 * System.out.println(rs.getBoolean("is_cancel"));
-				 * 
-				 * System.out.println(rs.getBoolean("cancel_reason"));
-				 */
-				System.out.println("enter");
-
 				orderItem.setQuantity(rs.getInt("quantity"));
 				orderItem.setStatus(rs.getString("status"));
 				orderItem.setCancel(rs.getBoolean("is_cancel"));

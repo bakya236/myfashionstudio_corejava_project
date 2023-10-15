@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 public class Price {
 
 	private int id;
-	private Product product = new Product();
-	private Size size = new Size();
+	private Product product;
+	private Size size;
 	private double price;
+	private double offer;
 	private LocalDateTime startedAt;
 	private LocalDateTime endedAt;
 
@@ -51,6 +52,14 @@ public class Price {
 		this.price = price;
 	}
 
+	public double getOffer() {
+		return offer;
+	}
+
+	public void setOffer(double offer) {
+		this.offer = offer;
+	}
+
 	public LocalDateTime getStartedAt() {
 		return startedAt;
 	}
@@ -67,10 +76,16 @@ public class Price {
 		this.endedAt = endedAt;
 	}
 
+	public int getCurrentPrice() {
+		double mrpPrice = this.price;
+		double currentPrice = mrpPrice - (mrpPrice * (this.offer / 100));
+		return (int) Math.round(currentPrice); // Round and convert to int
+	}
+
 	@Override
 	public String toString() {
-		return "Price [id=" + id + ", size=" + size + ", price=" + price + ", startedAt=" + startedAt + ", endedAt="
-				+ endedAt + "]";
+		return "Price [id=" + id + ", product=" + product + ", size=" + size + ", price=" + price + ", offer=" + offer
+				+ ", startedAt=" + startedAt + ", endedAt=" + endedAt + "]";
 	}
 
 }
