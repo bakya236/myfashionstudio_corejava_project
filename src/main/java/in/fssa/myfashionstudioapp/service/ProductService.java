@@ -63,13 +63,16 @@ public class ProductService {
 
 	/**
 	 * Retrieves a list of all products from the database.
+	 * 
+	 * @param offset
+	 * @param limit
 	 *
 	 * @return A list of ProductDTO objects containing product information.
 	 * @throws ValidationException If validation of data fails.
 	 * @throws ServiceException    If an error occurs while retrieving products.
 	 */
 
-	public List<ProductDTO> getAllProducts() throws ValidationException, ServiceException {
+	public List<ProductDTO> getAllProducts(int startId, int endId) throws ValidationException, ServiceException {
 
 		List<ProductDTO> productDTOList = new ArrayList<>();
 
@@ -77,7 +80,7 @@ public class ProductService {
 
 			ProductDAO productDAO = new ProductDAO();
 
-			productDTOList = productDAO.findAll(); // [{id,name,description,category},{},{}]
+			productDTOList = productDAO.findAll(startId, endId); // [{id,name,description,category},{},{}]
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -149,7 +152,8 @@ public class ProductService {
 	 *                             connection issue or query error.
 	 */
 
-	public List<ProductDTO> findAllProductsByCategoryId(int categoryId) throws ValidationException, ServiceException {
+	public List<ProductDTO> findAllProductsByCategoryId(int categoryId, int startId, int endId)
+			throws ValidationException, ServiceException {
 
 		List<ProductDTO> productDTOList = new ArrayList<>();
 
@@ -162,7 +166,7 @@ public class ProductService {
 
 			ProductDAO productDAO = new ProductDAO();
 
-			productDTOList = productDAO.findAllByCategoryId(categoryId);
+			productDTOList = productDAO.findAllByCategoryId(categoryId, startId, endId);
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();

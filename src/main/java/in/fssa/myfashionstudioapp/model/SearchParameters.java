@@ -9,6 +9,20 @@ public class SearchParameters {
 	private int maxPrice;
 	private String name;
 
+	public SearchParameters() {
+
+	}
+
+	public SearchParameters(String gender, String category, String color, int minPrice, int maxPrice, String name) {
+		super();
+		this.gender = gender;
+		this.category = category;
+		this.color = color;
+		this.minPrice = minPrice;
+		this.maxPrice = maxPrice;
+		this.name = name;
+	}
+
 	public String getGender() {
 		return gender;
 	}
@@ -56,4 +70,11 @@ public class SearchParameters {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return "SearchParameters [gender=" + gender + ", category=" + category + ", color=" + color + ", minPrice="
+				+ minPrice + ", maxPrice=" + maxPrice + ", name=" + name + "]";
+	}
+
 }

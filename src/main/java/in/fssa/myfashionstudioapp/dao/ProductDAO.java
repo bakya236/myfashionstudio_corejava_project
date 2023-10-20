@@ -83,13 +83,16 @@ public class ProductDAO {
 	 * information, price details, and size information. The retrieved products are
 	 * filtered based on their status and active prices.
 	 * 
+	 * @param offset
+	 * @param limit
+	 * 
 	 * @return A list of ProductDTO objects representing active products with their
 	 *         associated details.
 	 * @throws PersistenceException If an error occurs during the database
 	 *                              interaction, such as a SQL query error or
 	 *                              database connection issue.
 	 */
-	public List<ProductDTO> findAll() throws PersistenceException {
+	public List<ProductDTO> findAll(int startId, int endId) throws PersistenceException {
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -97,18 +100,20 @@ public class ProductDAO {
 		List<ProductDTO> productDTOList = new ArrayList<>();
 
 		try {
-			String query = "SELECT " + "p.id AS product_id, " + "p.image, " + "p.name AS product_name, " + "p.stock, "
-					+ "p.buyers_count, " + "c.id AS category_id, " + "c.category_name, " + "g.id AS gender_id, "
-					+ "g.gender_name, " + "col.id AS color_id, " + "col.color_name, " + "pr.id AS price_id, "
-					+ "pr.price, " + "pr.offer, " + "pr.ended_at, " + "s.id AS size_id, " + "s.value "
-					+ "FROM products AS p " + "JOIN categories AS c ON p.category_id = c.id "
+			String query = "SELECT DISTINCT " + "p.id AS product_id, " + "p.image, " + "p.name AS product_name, "
+					+ "p.stock, " + "p.buyers_count, " + "c.id AS category_id, " + "c.category_name, "
+					+ "g.id AS gender_id, " + "g.gender_name, " + "col.id AS color_id, " + "col.color_name, "
+					+ "pr.id AS price_id, " + "pr.price, " + "pr.offer, " + "pr.ended_at, " + "s.id AS size_id, "
+					+ "s.value " + "FROM products AS p " + "JOIN categories AS c ON p.category_id = c.id "
 					+ "JOIN genders AS g ON c.gender_id = g.id " + "JOIN colors AS col ON p.color_id = col.id "
 					+ "JOIN prices AS pr ON p.id = pr.product_id " + "JOIN sizes AS s ON pr.size_id = s.id "
-					+ "WHERE p.status = 1 " + "AND pr.ended_at IS NULL;";
+					+ "WHERE p.status = 1 " + "AND pr.ended_at IS NULL " + "AND p.id BETWEEN ? AND ?";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(query);
+			ps.setInt(1, startId);
+			ps.setInt(2, endId);
 
 			rs = ps.executeQuery();
 
@@ -189,13 +194,18 @@ public class ProductDAO {
 	 * 
 	 * @param categoryId The unique identifier (ID) of the category for which
 	 *                   products are to be retrieved.
+	 * @param offset
+	 * @param limit
 	 * @return A list of ProductDTO objects representing active products within the
 	 *         specified category with their associated details.
 	 * @throws PersistenceException If an error occurs during the database
 	 *                              interaction, such as a SQL query error or a
 	 *                              database connection issue.
 	 */
-	public List<ProductDTO> findAllByCategoryId(int categoryId) throws PersistenceException {
+	public List<ProductDTO> findAllByCategoryId(int categoryId, int startId, int endId) throws PersistenceException {
+
+		System.out.println("startId" + startId);
+		System.out.println("endId" + endId);
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -210,13 +220,16 @@ public class ProductDAO {
 					+ "FROM products AS p " + "JOIN categories AS c ON p.category_id = c.id "
 					+ "JOIN genders AS g ON c.gender_id = g.id " + "JOIN colors AS col ON p.color_id = col.id "
 					+ "JOIN prices AS pr ON p.id = pr.product_id " + "JOIN sizes AS s ON pr.size_id = s.id "
-					+ "WHERE category_id = ? AND p.status = 1 " + "AND pr.ended_at IS NULL;";
+					+ "WHERE category_id = ? AND p.status = 1 " + "AND pr.ended_at IS NULL "
+					+ "AND p.id BETWEEN ? AND ?";
 
 			con = ConnectionUtil.getConnection();
 
 			ps = con.prepareStatement(query);
 
 			ps.setInt(1, categoryId);
+			ps.setInt(2, startId);
+			ps.setInt(3, endId);
 
 			rs = ps.executeQuery();
 
@@ -280,6 +293,8 @@ public class ProductDAO {
 			ConnectionUtil.close(con, ps, rs);
 		}
 
+		System.out.println(productDTOList.size());
+
 		return productDTOList;
 
 	}
@@ -334,6 +349,106 @@ public class ProductDAO {
 					category.setGender(gender);
 
 					productDTO.setCategory(category);
+					productDTO.setStock(rs.getInt("stock"));
+					productDTO.setBuyersCount(rs.getInt("buyers_count"));
+
+					List<Price> priceList = new ArrayList<>();
+
+					productDTO.setPriceList(priceList);
+
+					productDTOList.add(productDTO);
+
+					currentProductId = productId;
+
+				}
+
+				Price price = new Price();
+				price.setId(rs.getInt("price_id"));
+				price.setPrice(rs.getDouble("price"));
+				price.setOffer(rs.getDouble("offer"));
+
+				Size size = new Size();
+				size.setId(rs.getInt("size_id"));
+				size.setValue(rs.getString("value"));
+				price.setSize(size);
+
+				productDTO.getPriceList().add(price);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.print(e.getMessage());
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			ConnectionUtil.close(con, ps, rs);
+		}
+
+		return productDTOList;
+	}
+
+	public List<ProductDTO> findByColorNameAndProductName(String color) throws PersistenceException {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ProductDTO> productDTOList = new ArrayList<>();
+
+		try {
+			String query = "SELECT " + "p.id AS product_id, " + "p.image, " + "p.name AS product_name, " + "p.stock, "
+					+ "p.buyers_count, " + "c.id AS category_id, " + "c.category_name, " + "g.id AS gender_id, "
+					+ "g.gender_name, " + "col.id AS color_id, " + "col.color_name, " + "pr.id AS price_id, "
+					+ "pr.price, " + "pr.offer, " + "pr.ended_at, " + "s.id AS size_id, " + "s.value "
+					+ "FROM products AS p " + "JOIN categories AS c ON p.category_id = c.id "
+					+ "JOIN genders AS g ON c.gender_id = g.id " + "JOIN colors AS col ON p.color_id = col.id "
+					+ "JOIN prices AS pr ON p.id = pr.product_id " + "JOIN sizes AS s ON pr.size_id = s.id "
+					+ "WHERE (p.name LIKE ? OR col.color_name = ?) " + "AND p.status = 1 " + "AND pr.ended_at IS NULL;";
+
+			con = ConnectionUtil.getConnection();
+
+			ps = con.prepareStatement(query);
+
+			String searchInput = "%" + color + "%";
+			ps.setString(1, searchInput);
+			ps.setString(2, color);
+
+			rs = ps.executeQuery();
+
+			int currentProductId = -1;
+
+			ProductDTO productDTO = null;
+
+			while (rs.next()) {
+
+				System.out.println("1+++");
+
+				int productId = rs.getInt("product_id");
+
+				if (productId != currentProductId) {
+
+					System.out.println("2+++");
+
+					productDTO = new ProductDTO();
+
+					productDTO.setId(productId);
+					productDTO.setImage(rs.getString("image"));
+					productDTO.setName(rs.getString("product_name"));
+
+					Category category = new Category(rs.getInt("category_id"));
+					category.setName(rs.getString("category_name"));
+
+					Gender gender = new Gender(rs.getInt("gender_id"));
+					gender.setName(rs.getString("gender_name"));
+
+					category.setGender(gender);
+
+					productDTO.setCategory(category);
+
+					Color color1 = new Color(rs.getInt("color_id"));
+					color1.setColorName(rs.getString("color_name"));
+
+					productDTO.setColor(color1);
+
 					productDTO.setStock(rs.getInt("stock"));
 					productDTO.setBuyersCount(rs.getInt("buyers_count"));
 
@@ -548,6 +663,11 @@ public class ProductDAO {
 		}
 
 		return productDTOList;
+	}
+
+	public List<ProductDTO> findByCategoryName(String category) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
