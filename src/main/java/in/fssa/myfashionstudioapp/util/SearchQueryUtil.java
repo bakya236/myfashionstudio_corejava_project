@@ -1,5 +1,6 @@
 package in.fssa.myfashionstudioapp.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,19 +23,42 @@ public class SearchQueryUtil {
 		// Replace consecutive spaces with a single space
 		return input.replaceAll(pattern, " ");
 	}
+	
+	
+	public static String removeCommonWords(String input) {
+		
+	    String[] commonWords = {"and","in", "like" , "for" , "less" ,"than" };
+
+	    input = input.toLowerCase();
+	    
+	    for (String word : commonWords) {
+	        input = input.replace(word, "");
+	    }
+	    return input;
+	}
 
 	public static String sanitizeText(String input) {
-		return removeConsecutiveSpaces(removeSpecialCharacters(input));
+		
+		input  = removeConsecutiveSpaces(removeSpecialCharacters(input));
+		
+		return removeCommonWords(input);
 	}
+	
 
 	private static Map<String, String> createGenderKeywordMap() {
 		Map<String, String> map = new HashMap<>();
 		map.put("men", "men");
 		map.put("male", "men");
 		map.put("boy", "men");
+		map.put("mens", "men");
+		map.put("males", "men");
+		map.put("boys", "men");
 		map.put("women", "women");
 		map.put("female", "women");
-		map.put("girls", "women");
+		map.put("girl", "women");
+		map.put("womens", "women");
+		map.put("females", "women");
+		map.put("girls", "women");		
 		return map;
 	}
 
@@ -55,6 +79,11 @@ public class SearchQueryUtil {
 				"maroon", "turquoise");
 		return colorList;
 	}
+	
+	private static List<String> createPatternKeyword() {
+		List<String> patternList = Arrays.asList("solidcolor","checked");
+		return patternList;
+	}
 
 	private static boolean isValidPrice(String token) {
 		try {
@@ -70,14 +99,19 @@ public class SearchQueryUtil {
 		SearchParameters searchParameters = new SearchParameters();
 
 		String[] tokens = searchInput.split(" ");
+		
+		System.out.println(Arrays.toString(tokens));
 
 		final Map<String, String> genderKeywordMap = createGenderKeywordMap();
 		final Map<String, String> categoryKeywordMap = createCategoryKeywordMap();
 		final List<String> colorKeyword = createColorKeyword();
+		final List<String> patternKeyword = createPatternKeyword();
+		
 
 		if (tokens.length == 1) {
 
 			String token = tokens[0].toLowerCase();
+
 
 			if (genderKeywordMap.containsKey(token)) {
 				searchParameters.setGender(genderKeywordMap.get(token));
@@ -91,10 +125,51 @@ public class SearchQueryUtil {
 			} else if (isValidPrice(token)) {
 				searchParameters.setMinPrice(Integer.parseInt(token));
 				return searchParameters;
-			} else {
+			}else {
 				searchParameters.setName(token);
 				return searchParameters;
 			}
+		}
+		
+		if(tokens.length >= 2) {
+			List<String> addPattern =  new ArrayList<String>();
+			for (String token : tokens) {
+
+				if (genderKeywordMap.containsKey(token)) {
+					searchParameters.setGender(genderKeywordMap.get(token));
+					
+				}else if(patternKeyword.contains(token)){
+						
+					System.out.println(token);
+					addPattern.add(token);
+					
+						searchParameters.setPattern(addPattern);
+				}else if (categoryKeywordMap.containsKey(token)) {
+					searchParameters.setCategory(categoryKeywordMap.get(token));
+					
+				} else if (colorKeyword.contains(token)) {
+					searchParameters.setColor(token);
+					
+				} else if (isValidPrice(token)) {
+					
+					for (String token2 : tokens) {
+					 if ("above".equals(token2)) {
+						 
+						 searchParameters.setMaxPrice(Integer.parseInt(token));
+						 searchParameters.setMinPrice(0);
+						 break; 
+					    }else {
+					        searchParameters.setMinPrice(Integer.parseInt(token));
+					        searchParameters.setMaxPrice(0);
+					    }
+					}
+					
+				}
+	
+			}
+		}
+		else {
+			searchParameters.setName(searchInput);
 		}
 
 //		} else {
@@ -122,5 +197,7 @@ public class SearchQueryUtil {
 		return searchParameters;
 
 	}
+
+
 
 }

@@ -23,9 +23,8 @@ public class ProductDTO extends Product {
 		return "ProductDTO [priceList=" + priceList + ", id=" + id + ", image=" + image + ", name=" + name
 				+ ", pattern=" + pattern + ", fit=" + fit + ", material=" + material + ", length=" + length
 				+ ", riseType=" + riseType + ", closureType=" + closureType + ", sleeveType=" + sleeveType
-				+ ", necklineType=" + necklineType + ", occasion=" + occasion + ", care=" + care + ", stock=" + stock
-				+ ", buyersCount=" + buyersCount + ", description=" + description + ", color=" + color + ", category="
-				+ category + ", status=" + status + "]";
+				+ ", necklineType=" + necklineType + ", occasion=" + occasion + ", care=" + care + ", description="
+				+ description + ", color=" + color + ", category=" + category + ", status=" + status + "]";
 	}
 
 }

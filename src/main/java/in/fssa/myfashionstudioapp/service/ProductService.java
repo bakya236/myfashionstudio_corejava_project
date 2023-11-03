@@ -72,7 +72,7 @@ public class ProductService {
 	 * @throws ServiceException    If an error occurs while retrieving products.
 	 */
 
-	public List<ProductDTO> getAllProducts(int startId, int endId) throws ValidationException, ServiceException {
+	public List<ProductDTO> getAllProducts(int limit, int offset) throws ValidationException, ServiceException {
 
 		List<ProductDTO> productDTOList = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class ProductService {
 
 			ProductDAO productDAO = new ProductDAO();
 
-			productDTOList = productDAO.findAll(startId, endId); // [{id,name,description,category},{},{}]
+			productDTOList = productDAO.findAll(limit, offset); // [{id,name,description,category},{},{}]
 
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -175,52 +175,6 @@ public class ProductService {
 
 		return productDTOList;
 
-	}
-
-	public List<ProductDTO> findProductsByProductName(String name) throws ServiceException {
-		List<ProductDTO> productDTOList = new ArrayList<>();
-
-		try {
-			ProductDAO productDAO = new ProductDAO();
-			productDTOList = productDAO.findByName(name);
-			System.out.println("Successfully got all products ny name");
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ServiceException("Error finding all products by name" + e.getMessage());
-		}
-
-		return productDTOList;
-	}
-
-	public List<ProductDTO> findProductsByGenderName(String genderName) throws ServiceException {
-		List<ProductDTO> productDTOList = new ArrayList<>();
-
-		try {
-			ProductDAO productDAO = new ProductDAO();
-			productDTOList = productDAO.findByGenderName(genderName);
-			System.out.println("Successfully found all product by gender name");
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ServiceException("Error finding all products by gender name" + e.getMessage());
-		}
-
-		return productDTOList;
-	}
-
-	public List<ProductDTO> findProductsByGenderNameAndCategoryName(String genderName, String categoryName)
-			throws ServiceException {
-		List<ProductDTO> productDTOList = new ArrayList<>();
-
-		try {
-			ProductDAO productDAO = new ProductDAO();
-			productDTOList = productDAO.findByGenderNameAndCategoryName(genderName, categoryName);
-			System.out.println("Successfully found all product by gender name and category name");
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new ServiceException("Error finding all products by gender name and category name" + e.getMessage());
-		}
-
-		return productDTOList;
 	}
 
 	/**

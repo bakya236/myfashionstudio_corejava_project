@@ -27,7 +27,7 @@ public class TestGetAllProducts {
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			List<ProductDTO> productList = productService.getAllProducts();
+			List<ProductDTO> productList = productService.getAllProducts(4, 0);
 
 			for (ProductDTO productPrice : productList) {
 

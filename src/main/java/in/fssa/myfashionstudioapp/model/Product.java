@@ -15,8 +15,6 @@ public class Product {
 	protected String necklineType;
 	protected String occasion;
 	protected String care;
-	protected int stock;
-	protected int buyersCount;
 	protected String description;
 	protected Color color;
 	protected Category category;
@@ -103,22 +101,6 @@ public class Product {
 		this.care = care;
 	}
 
-	public int getStock() {
-		return stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
-
-	public int getBuyersCount() {
-		return buyersCount;
-	}
-
-	public void setBuyersCount(int buyersCount) {
-		this.buyersCount = buyersCount;
-	}
-
 	public Color getColor() {
 		return color;
 	}
@@ -196,9 +178,8 @@ public class Product {
 		return "Product [id=" + id + ", image=" + image + ", name=" + name + ", pattern=" + pattern + ", fit=" + fit
 				+ ", material=" + material + ", length=" + length + ", riseType=" + riseType + ", closureType="
 				+ closureType + ", sleeveType=" + sleeveType + ", necklineType=" + necklineType + ", occasion="
-				+ occasion + ", care=" + care + ", stock=" + stock + ", buyersCount=" + buyersCount + ", description="
-				+ description + ", color=" + color + ", category=" + category + ", status=" + status + ", price="
-				+ price + "]";
+				+ occasion + ", care=" + care + ", description=" + description + ", color=" + color + ", category="
+				+ category + ", status=" + status + ", price=" + price + "]";
 	}
 
 }

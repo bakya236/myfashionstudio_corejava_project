@@ -17,7 +17,7 @@ public class TestFindAllProductsByCategoryId {
 		ProductService productService = new ProductService();
 
 		assertDoesNotThrow(() -> {
-			List<ProductDTO> ProductList = productService.findAllProductsByCategoryId(1);
+			List<ProductDTO> ProductList = productService.findAllProductsByCategoryId(1, 4, 0);
 			ProductList.forEach(System.out::println);
 		});
 	}

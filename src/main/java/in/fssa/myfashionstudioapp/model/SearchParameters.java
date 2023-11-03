@@ -1,6 +1,9 @@
 package in.fssa.myfashionstudioapp.model;
 
+import java.util.List;
+
 public class SearchParameters {
+
 
 	private String gender;
 	private String category;
@@ -8,12 +11,14 @@ public class SearchParameters {
 	private int minPrice;
 	private int maxPrice;
 	private String name;
+	private List<String> pattern;
 
 	public SearchParameters() {
 
 	}
-
-	public SearchParameters(String gender, String category, String color, int minPrice, int maxPrice, String name) {
+	
+	public SearchParameters(String gender, String category, String color, int minPrice, int maxPrice, String name,
+			List<String> pattern) {
 		super();
 		this.gender = gender;
 		this.category = category;
@@ -21,6 +26,7 @@ public class SearchParameters {
 		this.minPrice = minPrice;
 		this.maxPrice = maxPrice;
 		this.name = name;
+		this.pattern = pattern;
 	}
 
 	public String getGender() {
@@ -70,11 +76,26 @@ public class SearchParameters {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public List<String> getPattern() {
+		return pattern;
+	}
+
+	public void setPattern(List<String> pattern) {
+		this.pattern = pattern;
+	}
+
+
+
 
 	@Override
 	public String toString() {
 		return "SearchParameters [gender=" + gender + ", category=" + category + ", color=" + color + ", minPrice="
-				+ minPrice + ", maxPrice=" + maxPrice + ", name=" + name + "]";
+				+ minPrice + ", maxPrice=" + maxPrice + ", name=" + name + ", pattern =" + pattern + "]";
 	}
+
+
+
+
 
 }
